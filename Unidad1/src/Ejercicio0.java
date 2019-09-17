@@ -20,6 +20,7 @@ public class Ejercicio0 {
 			System.out.println("1-Mostrar la ruta absoluta "
 					+ "de la carpeta actual");
 			System.out.println("2-Pedir ruta y mostrar información");
+			System.out.println("3-Mostrar contenido de carpeta");
 			opcion=t.nextInt();t.nextLine();
 			switch(opcion) {
 			case 1:
@@ -28,9 +29,55 @@ public class Ejercicio0 {
 			case 2:
 				infoRuta();
 				break;
+			case 3:
+				mostrarContenido();
+				break;
 			}
 			
 		}while(opcion!=0);
+	}
+
+	private static void mostrarContenido() {
+		// TODO Auto-generated method stub
+		//Pedir carpeta
+		System.out.println("Introduce la ruta de una carpeta");
+		String ruta = t.nextLine();
+		//Creamos el objeto File de la ruta
+		File fRuta = new File(ruta);
+		//Comprobamos que exsite y que es una carperta
+		if(fRuta.exists() && fRuta.isDirectory()) {
+			//Obtener el contenido de la carpeta
+			File[] contenido = fRuta.listFiles();
+			//Recorremos el contenido para mostrar la información
+			//de cada elemento
+			for(File elemento:contenido) {
+				//Nombre
+				System.out.print(elemento.getName()+"\t");
+				//tipo
+				if(elemento.isDirectory())
+					System.out.print("D"+"\t");
+				else
+					System.out.print("F"+"\t");
+				//Permiso de lectura
+				if(elemento.canRead())
+					System.out.print("r");
+				else
+					System.out.print("-");
+				//Permiso de escritura
+				if(elemento.canWrite())
+					System.out.print("w");
+				else
+					System.out.print("-");
+				//Permiso de ejecución
+				if(elemento.canExecute())
+					System.out.println("x");
+				else
+					System.out.println("-");
+			}
+		}
+		else {
+			System.out.println("La ruta no existe o no es una carpeta");
+		}
 	}
 
 	private static void infoRuta() {
