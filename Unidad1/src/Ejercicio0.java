@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -11,7 +12,7 @@ public class Ejercicio0 {
 	//Declaramos el formato de fecha con la que vamos a trabajar
 	static SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
 		int opcion = 0;
@@ -21,6 +22,7 @@ public class Ejercicio0 {
 					+ "de la carpeta actual");
 			System.out.println("2-Pedir ruta y mostrar información");
 			System.out.println("3-Mostrar contenido de carpeta");
+			System.out.println("4-Crear/Renombrar/Borrar");
 			opcion=t.nextInt();t.nextLine();
 			switch(opcion) {
 			case 1:
@@ -32,9 +34,66 @@ public class Ejercicio0 {
 			case 3:
 				mostrarContenido();
 				break;
+			case 4:
+				crearRenombrarBorrar();
+				break;
 			}
 			
 		}while(opcion!=0);
+	}
+
+	private static void crearRenombrarBorrar() throws IOException {
+		// TODO Auto-generated method stub
+		System.out.println("Introduce la ruta de una carpeta/archivo");
+		String ruta = t.nextLine();
+		//Creamos el objeto File
+		File fRuta = new File(ruta);
+		//Comprobamos si existe
+		int opcion;
+		if(fRuta.exists()) {
+			//Pedimos si renombra o borra
+			System.out.println("1-Renombrar o 2-borrar?");
+			opcion = t.nextInt();t.nextLine();
+			if(opcion==1) {
+				//Renombrar
+				//Creamos objeto File a la nueva carpeta
+				System.out.println("Introduce el nuevo nombre");
+				File nuevo = new File(t.nextLine());
+				if(!nuevo.exists()) {
+					if(!fRuta.renameTo(nuevo)) {
+						System.out.println("Se ha producido error al renombrar");
+					}
+				}
+				else {
+					System.out.println("Error, el nuevo nombre ya existe");
+				}
+			}
+			else {
+				//Borrar
+				if(!fRuta.delete()) {
+					System.out.println("Se ha producio error al borrar");
+				}
+			}
+		}
+		else {
+			//Crear
+			//Pedimos tipo
+			System.out.println("1-Carpeta/2-Fichero");
+			opcion= t.nextInt();t.nextLine();
+			if(opcion==1) {
+				//Carpeta
+				if(!fRuta.mkdir()) {
+					System.out.println("Se ha producido erro al crear carpeta");
+				}
+			}
+			else {
+				//Archivo
+				if(!fRuta.createNewFile()) {
+					System.out.println("Se ha producido erro al crear archivo");
+				}
+			}
+			
+		}
 	}
 
 	private static void mostrarContenido() {
