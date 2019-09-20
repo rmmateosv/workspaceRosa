@@ -1,0 +1,6 @@
+A001;Rueda;80.00;34;No
+A002;Limpia Parabrisa;25.00;10;No
+A003;Retrovisor;30.00;12;Sí
+A004;Latas Aceite;20.00;100;No
+a100;liquido frenos;12.23;20;Sí
+A101;Gato;12;3;Sí
