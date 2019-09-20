@@ -29,9 +29,80 @@ public class ExplicacionFicherosTexto {
 				case 2:
 					insertarMaterial();
 					break;
+				case 3:
+					modificarMaterial();
 			}
 			
 		}while(opcion!=0);
+	}
+
+	private static void modificarMaterial() {
+		// TODO Auto-generated method stub
+		
+		//Pedimos el código del material a moficar
+		System.out.println("Introduce el código del material a modificar");
+		String codigo = t.nextLine();
+		
+		//Declaramos el fichero original para lectura
+		BufferedReader ficheroO = null;
+		//Declarmos un fichero temporal para escritura
+		BufferedWriter ficheroTmp = null;
+		
+		try {
+			//Abrimos los ficheros
+			ficheroO = new BufferedReader(new FileReader(nombreF));
+			//El fichero temporal se sobreescribe (append=false)
+			ficheroTmp = new BufferedWriter(new FileWriter("almacen.tmp",false));
+			//Leemos todas las líneas del fichero original
+			String linea;
+			while((linea=ficheroO.readLine())!=null) {
+				//Dividimos la línea en campos
+				String campos[] = linea.split(";");
+				//Comprobamos si la línea leída es la línea a modificar
+				if(codigo.equalsIgnoreCase(campos[0])) {
+					//Pedimos el nuevo nombre
+					System.out.println("Introduce el nuevo nombre");
+					campos[1] = t.nextLine();
+					System.out.println("Introduce el nuevo precio");
+					campos[2] = Float.toString(t.nextFloat());t.nextLine();
+					System.out.println("Introduce el nuevo stock");
+					campos[3] = Integer.toString(t.nextInt());t.nextLine();
+					//Escribimos la línea modificada en el fichero temporal
+					ficheroTmp.write(campos[0]+";"+campos[1]+";"+
+					                 campos[2]+";"+campos[3]+";"+
+					                 campos[4]+"\n");
+				}
+				else {
+					//Escribimos la línea tal cual se ha leído
+					ficheroTmp.write(linea+"\n");
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichero " + nombreF + "no encontrado");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(ficheroO!=null) {
+				try {
+					ficheroO.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(ficheroTmp!=null) {
+				try {
+					ficheroTmp.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
 	}
 
 	private static void insertarMaterial() {
