@@ -31,17 +31,23 @@ public class ExplicacionFicherosTexto {
 					insertarMaterial();
 					break;
 				case 3:
-					modificarMaterial();
+					//Parametro a false porque modifica y no borra
+					modificarMaterial(false);
+					break;
+				case 4:
+					//Parametro a false porque borra
+					modificarMaterial(true);
+					break;
 			}
 			
 		}while(opcion!=0);
 	}
 
-	private static void modificarMaterial() {
+	private static void modificarMaterial(boolean borrar) {
 		// TODO Auto-generated method stub
 		
 		//Pedimos el código del material a moficar
-		System.out.println("Introduce el código del material a modificar");
+		System.out.println("Introduce el código del material a modificar o borrar");
 		String codigo = t.nextLine();
 		
 		//Declaramos el fichero original para lectura
@@ -61,17 +67,19 @@ public class ExplicacionFicherosTexto {
 				String campos[] = linea.split(";");
 				//Comprobamos si la línea leída es la línea a modificar
 				if(codigo.equalsIgnoreCase(campos[0])) {
-					//Pedimos el nuevo nombre
-					System.out.println("Introduce el nuevo nombre");
-					campos[1] = t.nextLine();
-					System.out.println("Introduce el nuevo precio");
-					campos[2] = Float.toString(t.nextFloat());t.nextLine();
-					System.out.println("Introduce el nuevo stock");
-					campos[3] = Integer.toString(t.nextInt());t.nextLine();
-					//Escribimos la línea modificada en el fichero temporal
-					ficheroTmp.write(campos[0]+";"+campos[1]+";"+
-					                 campos[2]+";"+campos[3]+";"+
-					                 campos[4]+"\n");
+					if(!borrar) {
+						//Pedimos el nuevo nombre
+						System.out.println("Introduce el nuevo nombre");
+						campos[1] = t.nextLine();
+						System.out.println("Introduce el nuevo precio");
+						campos[2] = Float.toString(t.nextFloat());t.nextLine();
+						System.out.println("Introduce el nuevo stock");
+						campos[3] = Integer.toString(t.nextInt());t.nextLine();
+						//Escribimos la línea modificada en el fichero temporal
+						ficheroTmp.write(campos[0]+";"+campos[1]+";"+
+						                 campos[2]+";"+campos[3]+";"+
+						                 campos[4]+"\n");
+					}
 				}
 				else {
 					//Escribimos la línea tal cual se ha leído
@@ -133,16 +141,21 @@ public class ExplicacionFicherosTexto {
 			String linea = "";
 			System.out.println("Introduce el código");
 			linea = t.nextLine();
-			System.out.println("Introduce el nombre");
-			linea += ";"+t.nextLine();
-			System.out.println("Introduce el precio");
-			linea += ";"+t.nextLine();
-			System.out.println("Introduce el stock");
-			linea += ";"+t.nextLine();
-			//Por defecto el material está de alta
-			linea += ";Sí\n";
-			//Escribir línea
-			fichero.write(linea);
+			if(!existeMaterial(linea)) {
+				System.out.println("Introduce el nombre");
+				linea += ";"+t.nextLine();
+				System.out.println("Introduce el precio");
+				linea += ";"+t.nextLine();
+				System.out.println("Introduce el stock");
+				linea += ";"+t.nextLine();
+				//Por defecto el material está de alta
+				linea += ";Sí\n";
+				//Escribir línea
+				fichero.write(linea);
+			}
+			else {
+				System.out.println("Ya existe el código");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,6 +170,48 @@ public class ExplicacionFicherosTexto {
 				}
 			}
 		}
+	}
+
+	private static boolean existeMaterial(String codigo) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		//Declaramos el fichero almacen.txt para lectura
+		BufferedReader fichero = null;
+		try {
+			//Abrir el fichero
+			fichero = new BufferedReader(new FileReader(nombreF));
+			//Recorremos el fichero hasta el final
+			String linea;
+			while((linea=fichero.readLine())!=null) {
+				//Obtenemos cada campo de la línea
+				String campos[]=linea.split(";");
+				//comprobamos si el código leído es el código
+				//que buscamos
+				if(campos[0].equalsIgnoreCase(codigo)) {
+					resultado = true;
+					break;
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Fichero no encontrado");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(fichero!=null) {
+				//Cerrar fichero
+				try {
+					fichero.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return resultado;
 	}
 
 	private static void mostrarFichero() {
