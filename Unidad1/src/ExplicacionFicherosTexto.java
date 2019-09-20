@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -102,6 +103,22 @@ public class ExplicacionFicherosTexto {
 				}
 			}
 
+		}
+		
+		//Declarmos objetos de la clase File para borrar el 
+		//fichero original y para renombrar el fichero temporal
+		File fO = new File(nombreF);
+		File fTmp = new File("almacen.tmp");
+		
+		//Borramos el fichero orinal
+		if(fO.delete()) {
+			//Renombramos el fichero temporal
+			if(!fTmp.renameTo(fO)) {
+				System.out.println("Error al renombrear " + nombreF);
+			}
+		}
+		else {
+			System.out.println("Error al borrar el fichero " + nombreF);
 		}
 	}
 
