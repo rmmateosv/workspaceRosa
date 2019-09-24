@@ -93,8 +93,8 @@ public class ExplicacionFicherosBinarios {
 						//Modificamos solamente el nombre
 						System.out.println("Nuevo nombre");
 						nombre = t.nextLine();
-						ficheroTmp.writeChars(codigo);
-						ficheroTmp.writeChars(nombre);
+						ficheroTmp.writeChars(codigo+"\n");
+						ficheroTmp.writeChars(nombre+"\n");
 						ficheroTmp.writeFloat(precio);
 						ficheroTmp.writeInt(stock);
 						ficheroTmp.writeBoolean(alta);
@@ -104,8 +104,8 @@ public class ExplicacionFicherosBinarios {
 				else {
 					//Escribimos los datos en el fichero temporal
 					//tal y como se han leído
-					ficheroTmp.writeChars(codigo);
-					ficheroTmp.writeChars(nombre);
+					ficheroTmp.writeChars(codigo+"\n");
+					ficheroTmp.writeChars(nombre+"\n");
 					ficheroTmp.writeFloat(precio);
 					ficheroTmp.writeInt(stock);
 					ficheroTmp.writeBoolean(alta);
