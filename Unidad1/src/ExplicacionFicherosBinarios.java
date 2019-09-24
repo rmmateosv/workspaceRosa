@@ -43,11 +43,116 @@ public class ExplicacionFicherosBinarios {
 					insertarFicheroBinario();
 					break;
 				case 4:
-					
+					modificarBorrarFicheroBinario(false);
+					break;
+				case 5:
+					modificarBorrarFicheroBinario(true);
 					break;
 			}
 			
 		}while(opcion!=0);
+	}
+
+	private static void modificarBorrarFicheroBinario(boolean borrar) {
+		// TODO Auto-generated method stub
+		//Declaramos ficheros
+		DataInputStream ficheroO=null;
+		DataOutputStream ficheroTmp = null;
+		
+		try {
+			//Abrimos ficheros
+			ficheroO = new DataInputStream(new FileInputStream(nombreFB));
+			//Append = false para sobreescribir el fichero si existe
+			ficheroTmp = new DataOutputStream(
+					new FileOutputStream("almacen.tmp",false));
+			//Pedimos el registro a tratar
+			System.out.println("Código a modificar/borrar");
+			String codigoUs = t.nextLine();
+			//Leemos todos los registros del fichero original
+			while(true) {
+				//leemos Código
+				String codigo = "";
+				char letra;
+				while((letra=ficheroO.readChar())!='\n') {
+					codigo+=letra;
+				}
+				//leemos nombre
+				String nombre = "";
+				while((letra=ficheroO.readChar())!='\n') {
+					nombre+=letra;
+				}
+				//leemos precio
+				float precio = ficheroO.readFloat();
+				//leemos stock
+				int stock = ficheroO.readInt();
+				//leemos alta
+				boolean alta = ficheroO.readBoolean();
+				//Comprobamos si el código leído es el código a tratar
+				if(codigo.equalsIgnoreCase(codigoUs)) {
+					if(!borrar){
+						//Modificamos solamente el nombre
+						System.out.println("Nuevo nombre");
+						nombre = t.nextLine();
+						ficheroTmp.writeChars(codigo);
+						ficheroTmp.writeChars(nombre);
+						ficheroTmp.writeFloat(precio);
+						ficheroTmp.writeInt(stock);
+						ficheroTmp.writeBoolean(alta);
+					}
+					
+				}
+				else {
+					//Escribimos los datos en el fichero temporal
+					//tal y como se han leído
+					ficheroTmp.writeChars(codigo);
+					ficheroTmp.writeChars(nombre);
+					ficheroTmp.writeFloat(precio);
+					ficheroTmp.writeInt(stock);
+					ficheroTmp.writeBoolean(alta);
+				}
+			}
+		} 
+		catch (EOFException e) {
+			// TODO: handle exception
+			
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(ficheroO!=null) {
+				try {
+					ficheroO.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(ficheroTmp!=null) {
+				try {
+					ficheroTmp.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		//borrar fichero original
+		File fO = new File(nombreFB);
+		if(!fO.delete()) {
+			System.out.println("Error al borrar " + nombreFB);
+		}
+		
+		//renombrar el fichero temporal
+		File fTmp = new File("almacen.tmp");
+		if(!fTmp.renameTo(fO)) {
+			System.out.println("Error al renombrar almacen.tmp");
+		}
+		
 	}
 
 	private static void insertarFicheroBinario() {
