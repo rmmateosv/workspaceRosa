@@ -1,8 +1,11 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -34,10 +37,10 @@ public class ExplicacionFicherosBinarios {
 					crearFicheroBinario();
 					break;
 				case 2:
-					
+					mostrarFicheroBinario();
 					break;
 				case 3:
-					
+					insertarFicheroBinario();
 					break;
 				case 4:
 					
@@ -45,6 +48,106 @@ public class ExplicacionFicherosBinarios {
 			}
 			
 		}while(opcion!=0);
+	}
+
+	private static void insertarFicheroBinario() {
+		// TODO Auto-generated method stub
+		//Declaramos el fichero
+		DataOutputStream fichero=null;
+		
+		try {
+			//Abrimos para añadir
+			fichero = new DataOutputStream(
+					new FileOutputStream(nombreFB,true));
+			//Pedimos datos y escribimos
+			System.out.println("Código");
+			fichero.writeChars(t.nextLine()+"\n");
+			System.out.println("Nombre");
+			fichero.writeChars(t.nextLine()+"\n");
+			System.out.println("Precio");
+			fichero.writeFloat(t.nextFloat());t.nextLine();
+			System.out.println("Stock");
+			fichero.writeInt(t.nextInt());t.nextLine();
+			//Se crea siempre de alta
+			fichero.writeBoolean(true);
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(fichero!=null) {
+				try {
+					fichero.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static void mostrarFicheroBinario() {
+		// TODO Auto-generated method stub
+		//Declaramos fichero
+		DataInputStream fichero=null;
+		
+		try {
+			//Abrimos el fichero
+			fichero = new DataInputStream(new FileInputStream(nombreFB));
+			while(true) {
+				//Leemos en el mismo orden que están los datos en el fichero
+				//Leemos el código
+				String codigo="";
+				char letra;
+				while((letra=fichero.readChar())!='\n') {
+					codigo+=letra;
+				}
+				//Leemos el nombre
+				String nombre="";
+				while((letra=fichero.readChar())!='\n') {
+					nombre+=letra;
+				}
+				//Leemos el precio
+				float precio = fichero.readFloat();
+				//Leemos el stock
+				int stock = fichero.readInt();
+				//Leemos alta
+				boolean alta = fichero.readBoolean();
+				//Mostramos registro
+				System.out.println("Código:"+codigo+
+						"\tNombre:"+nombre+
+						"\tPrecio:"+precio+
+						"\tStock"+stock+
+						"\tAlta"+alta);
+				
+			}
+		} 
+		//Capturamos excepción al llegar al final de fichero
+		catch (EOFException e) {
+			// TODO: handle exception
+			
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(fichero!=null) {
+				try {
+					fichero.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private static void crearFicheroBinario() {
