@@ -53,7 +53,13 @@ public class Pieza implements Serializable{
 		this.alta = alta;
 	}
 	
-	
+	public void mostrar() {
+		System.out.println("Codigo:"+codigo+
+				"\tNombre:"+nombre+
+				"\tPrecio:"+precio+
+				"\tStock:"+stock+
+				"\tAlta:"+alta);
+	}
 	
 
 }
