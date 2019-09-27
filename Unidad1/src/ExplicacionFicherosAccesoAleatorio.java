@@ -127,7 +127,7 @@ public class ExplicacionFicherosAccesoAleatorio {
 			
 			//Vamos leyendo códigos hasta encontrar el buscado o llegar al fin
 			//de fichero
-			while(true || resultado) {
+			while(true && !resultado) {
 				//Leemos el código
 				String codigo="";
 				for(int i=0;i<lCodigo;i++) {
