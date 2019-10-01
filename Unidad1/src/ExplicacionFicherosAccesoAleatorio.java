@@ -26,8 +26,8 @@ public class ExplicacionFicherosAccesoAleatorio {
 					+ "fichero de objetos");
 			System.out.println("2-Leer/Mostrar");
 			System.out.println("3-Insertar/Añadir material sin duplicados");
-			System.out.println("4-Modificar material");
-			System.out.println("5-Borrar material");
+			System.out.println("4-Modificar precio material si no está de baja");
+			System.out.println("5-Baja material");
 			
 			opcion=t.nextInt();t.nextLine();
 			switch(opcion) {
@@ -41,14 +41,134 @@ public class ExplicacionFicherosAccesoAleatorio {
 					insertarFA();
 					break;
 				case 4:
-					
+					modificarFA();
 					break;
 				case 5:
-					
+					bajaFA();
 					break;
 			}
 			
 		}while(opcion!=0);
+	}
+	private static void bajaFA() {
+		// TODO Auto-generated method stub
+		//Pedimos el código a moficar
+				System.out.println("Introduce código a dar de baja");
+				StringBuilder codigo = new StringBuilder(t.nextLine());
+				codigo.setLength(lCodigo);		
+				//Declaramos fichero
+				RandomAccessFile fichero = null;		
+				try {
+					//Abrimos fichero
+					fichero = new RandomAccessFile(nombreFA,"rw");
+					//Leemos los registros hasta encontrar el que queremos modificar
+					while(true) {
+						//Leemos el código
+						String codFich = "";
+						for(int i=0;i<lCodigo;i++) {
+							codFich+=fichero.readChar();
+						}
+						//Comprobamos si el código leído es el buscado
+						if(codigo.toString().equalsIgnoreCase(codFich)) {
+							//Nos desplazamos hasta el campo Alta
+							//Nos movemos 48B
+							fichero.seek(fichero.getFilePointer()+48);
+							//Escribimos Alta = false
+							fichero.writeBoolean(false);
+							break;
+						}
+						else {
+							//Saltamos 49B para posicionarnos en el siguiente código
+							fichero.seek(fichero.getFilePointer()+49);
+						}
+					}
+				} 
+				catch (EOFException e) {
+					// TODO: handle exception
+				}
+				catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				finally {
+					if(fichero!=null) {
+						try {
+							fichero.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+	}
+	private static void modificarFA() {
+		// TODO Auto-generated method stub
+		
+		//Pedimos el código a moficar
+		System.out.println("Introduce código a modificar");
+		StringBuilder codigo = new StringBuilder(t.nextLine());
+		codigo.setLength(lCodigo);		
+		//Declaramos fichero
+		RandomAccessFile fichero = null;		
+		try {
+			//Abrimos fichero
+			fichero = new RandomAccessFile(nombreFA,"rw");
+			//Leemos los registros hasta encontrar el que queremos modificar
+			while(true) {
+				//Leemos el código
+				String codFich = "";
+				for(int i=0;i<lCodigo;i++) {
+					codFich+=fichero.readChar();
+				}
+				//Comprobamos si el código leído es el buscado
+				if(codigo.toString().equalsIgnoreCase(codFich)) {
+					//Comprobamos si está de alta
+					//Desplazamos 48B (40 nombre + 4Precio + 4Stock)
+					// el puntero para leer el campo alta
+					fichero.seek(fichero.getFilePointer()+48);
+					//Comprobamos si está de alta
+					if(fichero.readBoolean()) {
+						//Pedimos el nuevo precio
+						System.out.println("Introduce el nuevo precio");
+						float nuevoPrecio = t.nextFloat();t.nextLine();
+						//Desplazamos el puntero del fichero 
+						//9B hacia atrás (1Alta+4Stock+4Precio)
+						fichero.seek(fichero.getFilePointer()-9);
+						//Escribimos en el fichero el nuevo precio
+						fichero.writeFloat(nuevoPrecio);
+						//Finalizamos el bucle
+						break;	
+					}					
+				}
+				else {
+					//Saltamos 49B para posicionarnos en el siguiente código
+					fichero.seek(fichero.getFilePointer()+49);
+				}
+			}
+		} 
+		catch (EOFException e) {
+			// TODO: handle exception
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(fichero!=null) {
+				try {
+					fichero.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	private static void insertarFA() {
 		// TODO Auto-generated method stub
