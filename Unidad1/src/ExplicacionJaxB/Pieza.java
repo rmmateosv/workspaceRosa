@@ -51,6 +51,14 @@ public class Pieza {
 	public void setAlta(boolean alta) {
 		this.alta = alta;
 	}
+	public void mostrar() {
+		// TODO Auto-generated method stub
+		System.out.println("Codigo:"+codigo+
+				"\tNombre:"+nombre+
+				"\tPrecio:"+precio+
+				"\tStock:"+stock+
+				"\tAlta:"+alta);
+	}
 	
 	
 }

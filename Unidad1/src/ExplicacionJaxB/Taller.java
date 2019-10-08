@@ -45,5 +45,11 @@ public class Taller {
 		this.piezas = piezas;
 	}
 	
-	
+	public void mostrar() {
+		System.out.println("Nombre:" + nombre);
+		System.out.println("Piezas:");
+		for(Pieza p:piezas) {
+			p.mostrar();
+		}
+	}
 }
