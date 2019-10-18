@@ -35,7 +35,12 @@ public class Principal {
 						String consulta = t.nextLine();
 						taller.verCamposConsulta(consulta);
 						break;
-					
+					case 4:
+						taller.cargarPiezas();
+						break;
+					case 5:
+						taller.mostrarPiezas();
+						break;
 				}
 			}while(opcion!=0);
 		}

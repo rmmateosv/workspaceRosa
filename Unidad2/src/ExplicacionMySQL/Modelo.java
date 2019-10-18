@@ -1,5 +1,10 @@
 package ExplicacionMySQL;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -8,9 +13,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import FicherosDeObjetos.ExplicacionFO;
+
 public class Modelo {
 	private Connection conexion = null;
-	private String url = "jdbc:mysql://localhost:3306/taller";
+	private String url = "jdbc:mysql://localhost:3306/taller?serverTimezone=UTC";
 	private String usuario = "root";
 	private String clave = "root";
 
@@ -117,6 +124,86 @@ public class Modelo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void cargarPiezas() {
+		// TODO Auto-generated method stub
+		ObjectInputStream fichero=null;
+		String consulta = "insert into pieza values ";
+		boolean okConsulta = false;
+		try {
+			
+			fichero = new ObjectInputStream(new FileInputStream("Almacen.obj"));
+			while(true) {
+				okConsulta = true;
+				
+				FicherosDeObjetos.Pieza p = (FicherosDeObjetos.Pieza) fichero.readObject();
+				consulta+="(null,'"+p.getNombre()+"',"+p.getPrecio()+
+						","+p.getStock()+","+p.isAlta()+"),";
+			}
+		} 
+		catch (EOFException e) {
+			// TODO: handle exception
+			
+			
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(fichero!=null) {
+				try {
+					fichero.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		if(okConsulta) {
+			try {
+				//Quitar la última , de la consulta
+				consulta = consulta.substring(0, consulta.length()-1);
+				System.out.println(consulta);
+				Statement sentencia = conexion.createStatement();
+				int ok = sentencia.executeUpdate(consulta);
+				System.out.println("Se han creado " + ok + "piezas");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void mostrarPiezas() {
+		// TODO Auto-generated method stub
+		Statement sentencia;
+		try {
+			sentencia = conexion.createStatement();
+			ResultSet r = sentencia.executeQuery("select * from pieza");
+			
+			while(r.next()) {
+				Pieza p = new Pieza();
+				p.setCodigo(r.getInt(1));
+				p.setNombre(r.getString(2));
+				p.setPrecio(r.getFloat(3));
+				p.setStock(r.getInt(4));
+				p.setAlta(r.getBoolean(5));
+				p.mostrar();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	
