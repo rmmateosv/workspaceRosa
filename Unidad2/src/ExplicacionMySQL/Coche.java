@@ -31,5 +31,10 @@ public class Coche {
 		this.cliente = cliente;
 	}
 	
-	
+	public void mostrar() {
+		System.out.println("Matricula:"+matricula + 
+				"\tMarca:"+marca+
+				"\tModelo:"+modelo+
+				"\tCliente:"+cliente.getDni());
+	}
 }

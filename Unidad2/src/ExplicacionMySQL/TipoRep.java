@@ -18,5 +18,8 @@ public class TipoRep {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	public void mostrar() {
+		System.out.println("Código:"+codigo + "\tNombre:"+nombre);
+	}
 	
 }	

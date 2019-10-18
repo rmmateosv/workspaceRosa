@@ -1,5 +1,6 @@
 package ExplicacionMySQL;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class Principal {
@@ -20,6 +21,7 @@ public class Principal {
 				System.out.println("7-Añadir pieza a reparación");
 				System.out.println("8-Modificar datos cliente");
 				System.out.println("9-Virus borra todos los datos");
+				System.out.println("10-Mostrar nº de piezas, precio de la pieza más cara y precio medio");
 				opcion=t.nextInt();t.nextLine();
 				switch(opcion) {
 					case 1:
@@ -40,6 +42,26 @@ public class Principal {
 						break;
 					case 5:
 						taller.mostrarPiezas();
+						break;
+					case 6:
+						System.out.println("Selecciona el tipo");
+						taller.mostrarTiposRep();
+						Reparacion r = new Reparacion();
+						r.setTipo(new TipoRep());
+						r.getTipo().setCodigo(t.nextInt());t.nextLine();
+						
+						System.out.println("Selecciona coche");
+						taller.mostrarCoches();
+						r.setMatricula(new Coche());
+						r.getMatricula().setMatricula(t.nextLine());
+						
+						r.setFecha(new Date());
+						if(!taller.crearReparacion(r)) {
+							System.out.println("Error al crear la reparación");
+						}
+						break;
+					case 10:
+						taller.estadisticaPieza();
 						break;
 				}
 			}while(opcion!=0);

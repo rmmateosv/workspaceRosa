@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -204,6 +205,81 @@ public class Modelo {
 		}
 		
 		
+	}
+
+	public void estadisticaPieza() {
+		// TODO Auto-generated method stub
+		try {
+			//Creamos una sentecia con un parámetro en el where
+			//Los parámetros se ponen con ?
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select count(*), max(precio), "
+							+ "avg(precio) "
+							+ "from pieza "
+							+ "where alta = ?");
+			//Antes de ejecutar hay que rellenar los parámetros
+			sentencia.setBoolean(1, true);
+			//Ejecutamos la sentencia
+			ResultSet r = sentencia.executeQuery();
+			//mostrar datos
+			//Esta consulta lo máximo que devuelve es 1 fila por lo que 
+			//podemos usar un if en vez de un while
+			if(r.next()) {
+				System.out.println("Nº de piezas:"+r.getInt(1)+
+						"\tPrecio Máximo:"+r.getFloat(2)+
+						"\tPrecio Medio:"+r.getFloat(3));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public void mostrarTiposRep() {
+		// TODO Auto-generated method stub
+		Statement sentencia;
+		try {
+			sentencia = conexion.createStatement();
+			ResultSet r = sentencia.executeQuery("select * from tiporep");
+			
+			while(r.next()) {
+				TipoRep t = new TipoRep();
+				t.setCodigo(r.getInt(1));
+				t.setNombre(r.getString(2));
+				
+				t.mostrar();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void mostrarCoches() {
+		// TODO Auto-generated method stub
+		Statement sentencia;
+		try {
+			sentencia = conexion.createStatement();
+			ResultSet r = sentencia.executeQuery("select * "
+					+ "from coche join cliente "
+					+ "on cliente=dni");
+			
+			while(r.next()) {
+				Coche c = new Coche();
+				c.setMatricula(r.getString(1));
+				c.setMarca(r.getString(2));
+				c.setModelo(r.getString(3));
+				c.setCliente(new Cliente());
+				c.getCliente().setDni(r.getString(4));
+				c.getCliente().setNombre(r.getString(6));
+				c.mostrar();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
