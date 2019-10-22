@@ -56,9 +56,34 @@ public class Principal {
 						r.getMatricula().setMatricula(t.nextLine());
 						
 						r.setFecha(new Date());
-						if(!taller.crearReparacion(r)) {
+						int numero = taller.crearReparacion(r);
+						if(numero==-1) {
 							System.out.println("Error al crear la reparación");
 						}
+						else {
+							System.out.println("Reparación número "+numero + " creada");
+						}
+						break;
+					case 7:
+						System.out.println("Introduce código reparación");
+						taller.mostrarReparaciones();
+						PiezaReparacion pieza = new PiezaReparacion();
+						pieza.setReparacion(new Reparacion());
+						//Recogemos el código de reparación que introduce el usuario
+						pieza.getReparacion().setCodigo(t.nextInt());t.nextLine();
+						
+						System.out.println("Introduce código pieza");
+						taller.mostrarPiezas();
+						pieza.setPieza(new Pieza());
+						pieza.getPieza().setCodigo(t.nextInt());t.nextLine();
+						
+						System.out.println("Introduce cantidad");
+						pieza.setCantidad(t.nextInt());t.nextLine();
+						
+						if(!taller.insertarPiezaRep(pieza)) {
+							System.out.println("Error al añadir pieza a la reparación");
+						}
+						
 						break;
 					case 10:
 						taller.estadisticaPieza();

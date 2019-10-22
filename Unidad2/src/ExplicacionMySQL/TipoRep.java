@@ -2,7 +2,7 @@ package ExplicacionMySQL;
 
 public class TipoRep {
 	private int codigo;
-	private String nombre;
+	private String nombre="";
 	public TipoRep() {
 		super();
 	}

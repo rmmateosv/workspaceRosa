@@ -1,7 +1,7 @@
 package ExplicacionMySQL;
 
 public class Cliente {
-	private String dni,nombre,telefono;
+	private String dni="",nombre="",telefono="";
 
 	public Cliente() {
 		super();
