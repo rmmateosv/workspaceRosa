@@ -1,10 +1,13 @@
 package ExplicacionMySQL;
 
+import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
@@ -19,7 +22,10 @@ import FicherosDeObjetos.ExplicacionFO;
 
 public class Modelo {
 	private Connection conexion = null;
-	private String url = "jdbc:mysql://localhost:3306/taller?serverTimezone=UTC";
+	//private String url = "jdbc:mysql://localhost:3306/taller?serverTimezone=UTC";
+	//String de conexión si queremos ejecutar scripts
+	private String 
+	url = "jdbc:mysql://localhost:3306/taller?allowMultiQueries=true&serverTimezone=UTC";
 	private String usuario = "root";
 	private String clave = "root";
 
@@ -411,6 +417,134 @@ public class Modelo {
 			e.printStackTrace();
 		}
 		
+		return resultado;
+	}
+
+	public void ejecutarScript() {
+		// TODO Auto-generated method stub
+		//Cargamos en un String el script que está en un fichero
+		BufferedReader f = null;
+		try {
+			f = new BufferedReader(new FileReader("scriptUsuario.sql"));
+			String linea;
+			String script = "";
+			while((linea = f.readLine())!=null) {
+				script+=linea+"\n";
+			}
+			if(script.equals("")) {
+				System.out.println("Error: No se ha cargado el script");
+			}
+			else {
+				System.out.println(script);
+				Statement sentencia = conexion.createStatement();
+				sentencia.executeUpdate(script);
+				//System.out.println(r);
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			if(f!=null) {
+				try {
+					f.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public boolean login(String us, String clave2) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		
+		//Preparamos un String con la llamada a la función
+		//Se ponene entre {}
+		//Al ser una función debe empezar por ?=
+		//Depués call nombreFuncion(parámetros)	
+		String consulta = "{? = call validarUS(?,?)}";
+		
+		try {
+			//Creamos la sentencia
+			CallableStatement sentencia = conexion.prepareCall(consulta);
+			//Registramos parámetros de entrada
+			sentencia.setString(2, us);
+			sentencia.setString(3, clave2);
+			//Registramos el tipo del parámetro de salida
+			sentencia.registerOutParameter(1, java.sql.Types.INTEGER);
+			//Ejecutamos la sentencia
+			sentencia.executeUpdate();
+			//Recuperamos el valor devuelto por la función
+			if(sentencia.getInt(1)==0) {
+				resultado = true;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+
+	public void cerrarConexión() {
+		// TODO Auto-generated method stub
+		try {
+			conexion.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void borrar() {
+		// TODO Auto-generated method stub
+		String consulta = "{call borrarTablas()}";
+		
+		try {
+			CallableStatement sentencia = conexion.prepareCall(consulta);
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				System.out.println(r.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public boolean modificarCliente(Cliente c) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("update cliente "
+							+ "set nombre = ?, telefono = ? "
+							+ "where dni = ?");
+			sentencia.setString(1, c.getNombre());
+			sentencia.setString(2, c.getTelefono());
+			sentencia.setString(3, c.getDni());
+			
+			int r = sentencia.executeUpdate();
+			if(r==1) {
+				resultado=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return resultado;
 	}
 	
