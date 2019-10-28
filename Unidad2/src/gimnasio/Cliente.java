@@ -60,7 +60,14 @@ public class Cliente {
 	public void setBaja(boolean baja) {
 		this.baja = baja;
 	}
-	
+
+	public String mostrar() {
+		return "Cliente Id:" + id + "\tUsuario:" + usuario + 
+				"\tDni:" + dni + 
+				"\tNombre:" + nombre + apellidos + 
+				"\tTelefono:" + telefono + 
+				"\tBaja:" + baja;
+	}
 	
 	
 }

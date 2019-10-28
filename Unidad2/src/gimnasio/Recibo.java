@@ -1,5 +1,6 @@
 package gimnasio;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Recibo {
@@ -62,6 +63,14 @@ public class Recibo {
 	}
 	
 	
-	
+	public void mostrar() {
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy;");
+		System.out.println("Cliente:"+  cliente_id.getNombre() + 
+				" " + cliente_id.getApellidos() +
+		"\tFecha Emision:" + formatoFecha.format(fecha_emision)+ 
+		"\tFecha Pago:"+formatoFecha.format(fecha_pago) + 
+		"\tCuantia:"+  cuantia +
+		"\tPagado"+ pagado);
+	}
 	
 }

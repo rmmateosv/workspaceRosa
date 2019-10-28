@@ -16,6 +16,7 @@ public class Actividad {
 		this.activa = activa;
 		this.coste_mensual = coste_mensual;
 	}
+	
 
 	public int getId() {
 		return id;
@@ -49,5 +50,11 @@ public class Actividad {
 		this.coste_mensual = coste_mensual;
 	}
 	
-	
+	public void mostrar() {
+		System.out.println("Id:"+ id +
+		"\tNombre:" + nombre + 
+		"\tActiva:"+activa + 
+		"\tCoste mensual:"+ coste_mensual);
+
+	}
 }	
