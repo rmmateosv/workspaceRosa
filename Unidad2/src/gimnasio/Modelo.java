@@ -49,7 +49,8 @@ public class Modelo {
 		}
 	}
 
-
+	//Devuelve el tipo de usuario si el usario exsite
+	//Si no existe devuelve NE
 	public String comprobarUS(String us, String cl) {
 		// TODO Auto-generated method stub
 		String resultado = "";
@@ -65,10 +66,11 @@ public class Modelo {
 			ResultSet r = sentencia.executeQuery();
 			
 			if(r.next()) {
-				
+				resultado = r.getString(1);
 			}
 			else {
-				System.out.println();
+				System.out.println("Error: Usuario no existe");
+				resultado = "NE";
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
