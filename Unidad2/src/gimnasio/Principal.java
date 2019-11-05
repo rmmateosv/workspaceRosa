@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class Principal {
 	public static Scanner t = new Scanner(System.in);
+	private static Modelo gimnasio;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Modelo gimnasio = new Modelo();
+		gimnasio = new Modelo();
 		if(gimnasio.getConexion()!=null) {
 			//Pedimos usuario y clave
 			String us, cl;
@@ -70,9 +71,39 @@ public class Principal {
 			opcion = t.nextInt();t.nextLine();
 			switch(opcion) {
 			case 1:
-				mostrarClientes();
+				gimnasio.mostrarClientes();
 				break;
-			
+			case 2:
+				Cliente c = new Cliente();
+				System.out.println("Nombre de usuario");
+				c.setUsuario(new Usuario());
+				c.getUsuario().setUsuario(t.nextLine());
+				//Comprobamos que no existe el usuario
+				if(!gimnasio.existeUS(c.getUsuario().getUsuario())) {
+					System.out.println("Introduce DNI:");
+					c.setDni(t.nextLine());
+					System.out.println("Introduce Nombre:");
+					c.setNombre(t.nextLine());
+					System.out.println("Introduce Apellidos:");
+					c.setApellidos(t.nextLine());
+					System.out.println("Introduce Teléfono:");
+					c.setTelefono(t.nextLine());
+					c.setBaja(true);
+					c.getUsuario().setTipo("C");
+					int id = gimnasio.insertarCliente();
+					if(id==-1) {
+						System.out.println("Error al insertar el cliente");
+					}
+					else {
+						System.out.println("Cliente número "+id+" insertado");
+					}
+						
+					
+				}
+				else {
+					System.out.println("Error: el usuario ya existe");
+				}
+				break;
 			}
 		}while (opcion!=0);
 	}

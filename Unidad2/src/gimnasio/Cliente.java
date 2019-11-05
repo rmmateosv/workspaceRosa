@@ -62,7 +62,7 @@ public class Cliente {
 	}
 
 	public String mostrar() {
-		return "Cliente Id:" + id + "\tUsuario:" + usuario + 
+		return "Cliente Id:" + id + "\tUsuario:" + usuario.getUsuario() + 
 				"\tDni:" + dni + 
 				"\tNombre:" + nombre + apellidos + 
 				"\tTelefono:" + telefono + 
