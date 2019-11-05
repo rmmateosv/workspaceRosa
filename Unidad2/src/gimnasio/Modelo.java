@@ -124,4 +124,55 @@ public class Modelo {
 		
 		return resultado;
 	}
+
+	//Devuelve -1 si se produce error
+	//si no, devuelve el id del cliente creado
+	public int insertarCliente(Cliente c) {
+		// TODO Auto-generated method stub
+		int resultado = -1;
+		
+		try {
+			//Hay que actualizar dos tablas, por lo tanto usamos transacciones
+			conexion.setAutoCommit(false);
+			//Insert en tabla usuarios
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("insert into usuarios values "
+							+ "(?,sha2(?,224),?)");
+			sentencia.setString(1, c.getUsuario().getUsuario());
+			sentencia.setString(2, c.getUsuario().getUsuario());
+			sentencia.setString(3, c.getUsuario().getTipo());
+			
+			int r = sentencia.executeUpdate();
+			if(r==1) {
+				sentencia = conexion.prepareStatement(
+						"insert into cliente values "
+						+ "(null,?,?,?,?,?,?)",
+						Statement.RETURN_GENERATED_KEYS);
+				sentencia.setString(1, c.getUsuario().getUsuario());
+				sentencia.setString(2, c.getDni());
+				sentencia.setString(3, c.getApellidos());
+				sentencia.setString(4, c.getNombre());
+				sentencia.setString(5, c.getTelefono());
+				sentencia.setBoolean(6, true);
+				r = sentencia.executeUpdate();
+				if(r==1) {
+					conexion.commit();
+					//Devolvemos el id del cliente creado
+					ResultSet ids = sentencia.getGeneratedKeys();
+					if(ids.next()) {
+						resultado = ids.getInt(1);
+					}
+				}
+				else {
+					conexion.rollback();
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
 }

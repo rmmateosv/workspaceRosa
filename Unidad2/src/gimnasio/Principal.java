@@ -90,7 +90,7 @@ public class Principal {
 					c.setTelefono(t.nextLine());
 					c.setBaja(true);
 					c.getUsuario().setTipo("C");
-					int id = gimnasio.insertarCliente();
+					int id = gimnasio.insertarCliente(c);
 					if(id==-1) {
 						System.out.println("Error al insertar el cliente");
 					}
