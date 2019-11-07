@@ -153,7 +153,7 @@ public class Modelo {
 				sentencia.setString(3, c.getApellidos());
 				sentencia.setString(4, c.getNombre());
 				sentencia.setString(5, c.getTelefono());
-				sentencia.setBoolean(6, true);
+				sentencia.setBoolean(6, false);
 				r = sentencia.executeUpdate();
 				if(r==1) {
 					conexion.commit();
@@ -210,7 +210,7 @@ public class Modelo {
 		try {
 			PreparedStatement sentencia = 
 					conexion.prepareStatement("update cliente "
-							+ "set nombre = ?, apellidos=?, telefono = ? "
+							+ "set nombre = ?, apellidos=?, tfno_contacto = ? "
 							+ "where id = ?");
 			sentencia.setString(1, c.getNombre());
 			sentencia.setString(2, c.getApellidos());
@@ -220,6 +220,112 @@ public class Modelo {
 			if(sentencia.executeUpdate()==1) {
 				resultado=true;
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public boolean bajaCliente(Cliente c) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("update cliente "
+							+ "set baja = ? "
+							+ "where id = ?");
+			sentencia.setBoolean(1, true);
+			sentencia.setInt(2, c.getId());
+			
+			if(sentencia.executeUpdate()==1) {
+				resultado=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public void mostrarActividadesCliente(String usuario) {
+		// TODO Auto-generated method stub
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * "
+							+ "from cliente c join participa p "
+							+ "on c.id = p.cliente_id "
+							+ "join actividad a "
+							+ "on a.id = p.actividad_id "
+							+ "where usuario = ?");
+			sentencia.setString(1, usuario);
+			ResultSet r = sentencia.executeQuery();
+			while(r.next()) {
+				Actividad a = new Actividad(r.getInt(10), r.getString(11), 
+						r.getString(13), r.getFloat(12)); 
+				a.mostrar();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public void mostrarActivides() {
+		// TODO Auto-generated method stub
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * "
+							+ "from actividad ");
+			ResultSet r = sentencia.executeQuery();
+			while(r.next()) {
+				Actividad a = new Actividad(r.getInt(1), r.getString(2), 
+						r.getString(4), r.getFloat(3)); 
+				a.mostrar();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public Actividad obtenerActividad(int id) {
+		// TODO Auto-generated method stub
+		Actividad resultado = null;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * from actividad "
+							+ "where id = ?");
+			sentencia.setInt(1, id);
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				resultado = new Actividad(r.getInt(1), r.getString(2), 
+						r.getString(4), r.getFloat(3)); 
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public boolean estaInscirto(String usuario2, Actividad a) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * "
+							+ "from cliente c join participa p "
+							+ "on c.id = p.cliente_id "
+							+ "where c.usuario = ? "
+							+ "and p.actividad_id = ?");
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -22,7 +22,7 @@ public class Principal {
 				menuAdmin();
 				break;
 			case "C":
-				menuCliente();
+				menuCliente(us);
 				break;
 			}
 			
@@ -34,9 +34,40 @@ public class Principal {
 		}
 	}
 
-	private static void menuCliente() {
+	private static void menuCliente(String usuario) {
 		// TODO Auto-generated method stub
-		
+		int opcion = 0;
+		do {
+			System.out.println("0-Salir");
+			System.out.println("1-Ver mis actividades");
+			System.out.println("2-Inscribirse en una actividad");
+			System.out.println("3-Borrarse de una actividad");
+			System.out.println("4-Ver recibos");
+			opcion = t.nextInt();t.nextLine();
+			Actividad a;
+			switch(opcion) {
+			case 1:
+				gimnasio.mostrarActividadesCliente(usuario);
+				break;
+			case 2:
+				gimnasio.mostrarActivides();
+				System.out.println("Introduce el código de actividad");
+				a = new Actividad();
+				a.setId(t.nextInt());t.nextLine();
+				a = gimnasio.obtenerActividad(a.getId());
+				if(a==null) {
+					System.out.println("Error la actividad no existe");
+				}
+				else {
+					//Comprobamos si ya está inscrito
+					if(!gimnasio.estaInscirto(usuario,a)) {
+						
+					}
+				}
+				break;
+			
+			}
+		}while (opcion!=0);
 	}
 
 	private static void menuAdmin() {
@@ -127,6 +158,26 @@ public class Principal {
 					}
 				}
 				
+				break;
+			case 4:
+				gimnasio.mostrarClientes();
+				System.out.println("Introduce id de cliente");
+				c = new Cliente();
+				c.setId(t.nextInt()); t.nextLine();
+				c = gimnasio.obtenerCliente(c.getId());
+				if(c==null) {
+					System.out.println("Error: No existe el cliente");
+				}
+				else {
+					if(c.isBaja()) {
+						System.out.println("El cliente ya está de baja");
+					}
+					else {
+						if(!gimnasio.bajaCliente(c)){
+							System.out.println("No se ha podido dar de baja el cliente");
+						}
+					}
+				}
 				break;
 			}
 		}while (opcion!=0);
