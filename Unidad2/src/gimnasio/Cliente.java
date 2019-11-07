@@ -61,12 +61,12 @@ public class Cliente {
 		this.baja = baja;
 	}
 
-	public String mostrar() {
-		return "Cliente Id:" + id + "\tUsuario:" + usuario.getUsuario() + 
+	public void mostrar() {
+		System.out.println("Cliente Id:" + id + "\tUsuario:" + usuario.getUsuario() + 
 				"\tDni:" + dni + 
-				"\tNombre:" + nombre + apellidos + 
+				"\tNombre:" + nombre + " "+apellidos + 
 				"\tTelefono:" + telefono + 
-				"\tBaja:" + baja;
+				"\tBaja:" + baja);
 	}
 	
 	

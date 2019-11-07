@@ -69,12 +69,13 @@ public class Principal {
 			System.out.println("3-Modificar Cliente");
 			System.out.println("4-Borrar Cliente");
 			opcion = t.nextInt();t.nextLine();
+			Cliente c;
 			switch(opcion) {
 			case 1:
 				gimnasio.mostrarClientes();
 				break;
 			case 2:
-				Cliente c = new Cliente();
+				c = new Cliente();
 				System.out.println("Nombre de usuario");
 				c.setUsuario(new Usuario());
 				c.getUsuario().setUsuario(t.nextLine());
@@ -103,6 +104,29 @@ public class Principal {
 				else {
 					System.out.println("Error: el usuario ya existe");
 				}
+				break;
+			case 3:
+				//Solamente modificamos el nombre, apellidos y teléfono
+				gimnasio.mostrarClientes();
+				System.out.println("Introduce el id del cliente a modificar");
+				c = new Cliente();
+				c.setId(t.nextInt());t.nextLine();
+				c= gimnasio.obtenerCliente(c.getId());
+				if(c==null) {
+					System.out.println("Error: Cliente no existe");
+				}
+				else {
+					System.out.println("Nuevo Nombre");
+					c.setNombre(t.nextLine());
+					System.out.println("Nuevo Apellido");
+					c.setApellidos(t.nextLine());
+					System.out.println("Nuevo Teléfono");
+					c.setTelefono(t.nextLine());
+					if(!gimnasio.modificarCliente(c)) {
+						System.out.println("Error al moficiar el cliente");
+					}
+				}
+				
 				break;
 			}
 		}while (opcion!=0);

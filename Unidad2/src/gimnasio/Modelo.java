@@ -175,4 +175,55 @@ public class Modelo {
 		
 		return resultado;
 	}
+
+
+	public Cliente obtenerCliente(int id) {
+		// TODO Auto-generated method stub
+		Cliente resultado = null;
+		
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * from cliente "
+							+ "where id = ?");
+			sentencia.setInt(1, id);
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				resultado = new Cliente(r.getInt(1),
+						new Usuario(r.getString(2),null),
+						r.getString(3),
+						r.getString(4),
+						r.getString(5),
+						r.getString(6),
+						r.getBoolean(7));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public boolean modificarCliente(Cliente c) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("update cliente "
+							+ "set nombre = ?, apellidos=?, telefono = ? "
+							+ "where id = ?");
+			sentencia.setString(1, c.getNombre());
+			sentencia.setString(2, c.getApellidos());
+			sentencia.setString(3, c.getTelefono());
+			sentencia.setInt(4, c.getId());
+			
+			if(sentencia.executeUpdate()==1) {
+				resultado=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 }
