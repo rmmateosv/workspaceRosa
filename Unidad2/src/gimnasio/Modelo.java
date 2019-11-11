@@ -315,7 +315,7 @@ public class Modelo {
 	}
 
 
-	public boolean estaInscirto(String usuario2, Actividad a) {
+	public boolean estaInscirto(String usuario, Actividad a) {
 		// TODO Auto-generated method stub
 		boolean resultado = false;
 		try {
@@ -325,11 +325,94 @@ public class Modelo {
 							+ "on c.id = p.cliente_id "
 							+ "where c.usuario = ? "
 							+ "and p.actividad_id = ?");
+			sentencia.setString(1, usuario);
+			sentencia.setInt(2, a.getId());
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				resultado=true;
+			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return resultado;
+	}
+
+
+	public boolean inscribirEnActividad(String usuario, Actividad a) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("insert into participa "
+							+ "values (?,(select id "
+							+ "from cliente where usuario = ?))");
+			sentencia.setInt(1, a.getId());
+			sentencia.setString(2, usuario);
+			int r = sentencia.executeUpdate();
+			if(r==1) {
+				resultado=true;
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public boolean borrarActividadCliente(String usuario2, Actividad a) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("delete from participa "
+							+ "where actividad_id = ? and "
+							+ "cliente_id = (select id from cliente "
+							+ "where usuario = ?)");
+			sentencia.setInt(1, a.getId());
+			sentencia.setString(2, usuario2);
+			int r = sentencia.executeUpdate();
+			if(r==1) {
+				resultado=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+
+	public void mostrarRecibosCliente(String usuario2) {
+		// TODO Auto-generated method stub
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * from recibo r join cliente c "
+							+ "on r.cliente_id = c.id "
+							+ "where c.usuario = ?");
+			sentencia.setString(1, usuario2);
+			ResultSet r = sentencia.executeQuery();
+			while(r.next()) {
+				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
+													new Usuario(r.getString(7), null), 
+													r.getString(8), 
+													r.getString(9), 
+													r.getString(10), 
+													r.getString(11), 
+													r.getBoolean(12)), 
+						new java.util.Date(r.getDate(2).getTime()), 
+						new java.util.Date(r.getDate(3).getTime()),
+						r.getFloat(4), 
+						r.getBoolean(5));
+				recibo.mostrar();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

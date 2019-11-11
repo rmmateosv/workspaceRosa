@@ -61,11 +61,27 @@ public class Principal {
 				else {
 					//Comprobamos si ya está inscrito
 					if(!gimnasio.estaInscirto(usuario,a)) {
-						
+						if(!gimnasio.inscribirEnActividad(usuario,a)) {
+							System.out.println("Error al inscribirse en la actividad");
+						}
+					}
+					else {
+						System.out.println("Error: Ya está inscrito en la actividad");
 					}
 				}
 				break;
-			
+			case 3:
+				gimnasio.mostrarActividadesCliente(usuario);
+				System.out.println("Introduce código actividad");
+				a = new Actividad();
+				a.setId(t.nextInt());t.nextLine();
+				if(!gimnasio.borrarActividadCliente(usuario, a)) {
+					System.out.println("Error al darse de baja de la actividad");
+				}
+				break;
+			case 4:
+				gimnasio.mostrarRecibosCliente(usuario);
+				break;
 			}
 		}while (opcion!=0);
 	}
