@@ -395,6 +395,7 @@ public class Modelo {
 		// TODO Auto-generated method stub
 		try {
 			SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+			
 			PreparedStatement sentencia = 
 					conexion.prepareStatement("select * from recibo r join cliente c "
 							+ "on r.cliente_id = c.id "
@@ -402,10 +403,12 @@ public class Modelo {
 			sentencia.setString(1, usuario2);
 			ResultSet r = sentencia.executeQuery();
 			while(r.next()) {
+				
 				java.util.Date fechaPago=null;
 				if(r.getDate(3) == null) {
 					fechaPago = formato.parse("31-12-9999");
 				}
+				
 				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
 													new Usuario(r.getString(7), null), 
 													r.getString(8), 
@@ -425,6 +428,42 @@ public class Modelo {
 		}
 	}
 
+	public void mostrarRecibosCliente(int cliente) {
+		// TODO Auto-generated method stub
+		try {
+			SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+			
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * from recibo r join cliente c "
+							+ "on r.cliente_id = c.id "
+							+ "where c.id = ? and r.pagado = false");
+			sentencia.setInt(1, cliente);
+			ResultSet r = sentencia.executeQuery();
+			while(r.next()) {
+				
+				java.util.Date fechaPago=null;
+				if(r.getDate(3) == null) {
+					fechaPago = formato.parse("31-12-9999");
+				}
+				
+				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
+													new Usuario(r.getString(7), null), 
+													r.getString(8), 
+													r.getString(9), 
+													r.getString(10), 
+													r.getString(11), 
+													r.getBoolean(12)), 
+						new java.util.Date(r.getDate(2).getTime()), 
+						fechaPago,
+						r.getFloat(4), 
+						r.getBoolean(5));
+				recibo.mostrar();
+			}
+		} catch (SQLException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public boolean generarRecibos(int mes, int anio) {
 		// TODO Auto-generated method stub
@@ -493,5 +532,32 @@ public class Modelo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+	public boolean pagarRecibo(Cliente c, java.util.Date fecha) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("update recibo "
+							+ "set fecha_pago = ?,"
+							+ "pagado = ? "
+							+ "where cliente_id = ? and "
+							+ "fecha_emision = ?");
+			sentencia.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+			sentencia.setBoolean(2, true);
+			sentencia.setInt(3, c.getId());
+			sentencia.setDate(4, new java.sql.Date(fecha.getTime()));
+			
+			int r = sentencia.executeUpdate();
+			if(r==1) {
+				resultado=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 }

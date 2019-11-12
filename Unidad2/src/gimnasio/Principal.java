@@ -1,5 +1,7 @@
 package gimnasio;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Principal {
@@ -111,6 +113,25 @@ public class Principal {
 				}
 				else {
 					gimnasio.mostrarRecibos(mes,anio);
+				}
+				break;
+			case 4:
+				try {
+					gimnasio.mostrarClientes();
+					System.out.println("Introduce id");
+					Cliente c = new Cliente();
+					c.setId(t.nextInt());t.nextLine();
+					gimnasio.mostrarRecibosCliente(c.getId());
+					System.out.println("Introduce fecha de emisión recibo");
+					SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+					java.util.Date fecha = formato.parse(t.nextLine());
+					if(!gimnasio.pagarRecibo(c,fecha)) {
+						System.out.println("Error al pagar el recibo");
+					}
+					
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				break;
 			
