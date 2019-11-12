@@ -1,16 +1,20 @@
 package gimnasio;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 public class Modelo {
 	private Connection conexion = null;
-	private String urlBd ="jdbc:mysql://localhost:3306/gimnasio?serverTimezone=UTC",
+	private String urlBd ="jdbc:mysql://localhost:3306/gimnasio?serverTimezone=Europe/Madrid",
 			usuario = "gimnasio",
 			clave = "gimnasio";
 	
@@ -411,6 +415,73 @@ public class Modelo {
 				recibo.mostrar();
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public boolean generarRecibos(int mes, int anio) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		
+	try {
+		CallableStatement rutina  = 
+				conexion.prepareCall("{?= call generar_recibos(?, ?)}");
+		rutina.registerOutParameter(1, java.sql.Types.INTEGER);
+		rutina.setInt(2, mes);
+		rutina.setInt(3, anio);
+		
+		rutina.executeUpdate();
+		
+		int r = rutina.getInt(1);
+		if(r==1 || r==0) {
+			resultado = true;
+		}
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
+		
+		return resultado;
+	}
+
+
+	public void mostrarRecibos(int mes, int anio) {
+		// TODO Auto-generated method stub
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * from recibo r "
+							+ "join cliente c "
+							+ "on r.cliente_id = c.id "
+							+ "where fecha_emision = ?");
+			
+			SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+			java.util.Date fecha = formato.parse("01-"+mes+"-"+anio);
+			sentencia.setDate(1, new java.sql.Date(fecha.getTime()));
+			
+			ResultSet r = sentencia.executeQuery();
+			while(r.next()) {
+				java.util.Date fechaPago=null;
+				if(r.getDate(3) == null) {
+					fechaPago = formato.parse("31-12-9999");
+				}
+				
+				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
+						new Usuario(r.getString(7), null), 
+						r.getString(8), 
+						r.getString(9), 
+						r.getString(10), 
+						r.getString(11), 
+						r.getBoolean(12)), 
+						new java.util.Date(r.getDate(2).getTime()), 
+						fechaPago,
+						r.getFloat(4), 
+						r.getBoolean(5));
+				recibo.mostrar();
+			}
+		} catch (SQLException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -64,7 +64,7 @@ public class Recibo {
 	
 	
 	public void mostrar() {
-		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy;");
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy;");
 		System.out.println("Cliente:"+  cliente_id.getNombre() + 
 				" " + cliente_id.getApellidos() +
 		"\tFecha Emision:" + formatoFecha.format(fecha_emision)+ 

@@ -101,6 +101,18 @@ public class Principal {
 			case 1:
 				gestionarClientes();
 				break;
+			case 3:
+				System.out.println("Mes");
+				int mes = t.nextInt();t.nextLine();
+				System.out.println("Año");
+				int anio = t.nextInt();t.nextLine();
+				if(!gimnasio.generarRecibos(mes,anio)) {
+					System.out.println("Error al generar recibos");
+				}
+				else {
+					gimnasio.mostrarRecibos(mes,anio);
+				}
+				break;
 			
 			}
 		}while (opcion!=0);
