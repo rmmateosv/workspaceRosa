@@ -394,6 +394,7 @@ public class Modelo {
 	public void mostrarRecibosCliente(String usuario2) {
 		// TODO Auto-generated method stub
 		try {
+			SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 			PreparedStatement sentencia = 
 					conexion.prepareStatement("select * from recibo r join cliente c "
 							+ "on r.cliente_id = c.id "
@@ -401,6 +402,10 @@ public class Modelo {
 			sentencia.setString(1, usuario2);
 			ResultSet r = sentencia.executeQuery();
 			while(r.next()) {
+				java.util.Date fechaPago=null;
+				if(r.getDate(3) == null) {
+					fechaPago = formato.parse("31-12-9999");
+				}
 				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
 													new Usuario(r.getString(7), null), 
 													r.getString(8), 
@@ -409,12 +414,12 @@ public class Modelo {
 													r.getString(11), 
 													r.getBoolean(12)), 
 						new java.util.Date(r.getDate(2).getTime()), 
-						new java.util.Date(r.getDate(3).getTime()),
+						fechaPago,
 						r.getFloat(4), 
 						r.getBoolean(5));
 				recibo.mostrar();
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -481,7 +486,10 @@ public class Modelo {
 						r.getBoolean(5));
 				recibo.mostrar();
 			}
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
