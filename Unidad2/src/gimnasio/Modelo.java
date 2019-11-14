@@ -408,6 +408,9 @@ public class Modelo {
 				if(r.getDate(3) == null) {
 					fechaPago = formato.parse("31-12-9999");
 				}
+				else {
+					fechaPago = new java.util.Date(r.getDate(3).getTime());
+				}
 				
 				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
 													new Usuario(r.getString(7), null), 
@@ -444,6 +447,9 @@ public class Modelo {
 				java.util.Date fechaPago=null;
 				if(r.getDate(3) == null) {
 					fechaPago = formato.parse("31-12-9999");
+				}
+				else {
+					fechaPago = new java.util.Date(r.getDate(3).getTime());
 				}
 				
 				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
@@ -510,6 +516,9 @@ public class Modelo {
 				java.util.Date fechaPago=null;
 				if(r.getDate(3) == null) {
 					fechaPago = formato.parse("31-12-9999");
+				}
+				else {
+					fechaPago = new java.util.Date(r.getDate(3).getTime());
 				}
 				
 				Recibo recibo = new Recibo(new Cliente(r.getInt(6), 
