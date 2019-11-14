@@ -99,6 +99,7 @@ public class Principal {
 			System.out.println("4-Pagar Recibos");
 			System.out.println("5-Mostrar recibos");
 			opcion = t.nextInt();t.nextLine();
+			int anio;
 			switch(opcion) {
 			case 1:
 				gestionarClientes();
@@ -107,7 +108,7 @@ public class Principal {
 				System.out.println("Mes");
 				int mes = t.nextInt();t.nextLine();
 				System.out.println("Año");
-				int anio = t.nextInt();t.nextLine();
+				anio = t.nextInt();t.nextLine();
 				if(!gimnasio.generarRecibos(mes,anio)) {
 					System.out.println("Error al generar recibos");
 				}
@@ -133,6 +134,11 @@ public class Principal {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				break;
+			case 5:
+				System.out.println("Introduce año");
+				anio = t.nextInt();t.nextLine();
+				gimnasio.mostrarRecibos(anio);
 				break;
 			
 			}

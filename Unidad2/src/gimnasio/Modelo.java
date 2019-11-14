@@ -560,4 +560,32 @@ public class Modelo {
 		}
 		return resultado;
 	}
+
+
+	public void mostrarRecibos(int anio) {
+		// TODO Auto-generated method stub
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select sum(cuantia), c.id, c.dni "
+							+ "from recibo r join cliente c "
+							+ "on r.cliente_id = c.id "
+							+ "where year(fecha_emision) = ? and "
+							+ "pagado = true "
+							+ "group by c.id" 
+							 );
+			sentencia.setInt(1, anio);
+			ResultSet r = sentencia.executeQuery();
+			float total = 0;
+			while(r.next()) {
+				System.out.println("Id Cliente:" + r.getInt(2)+
+						"\nDNI:"+r.getString(3) + 
+						"\tTotal:"+r.getFloat(1));
+				total += r.getFloat(1);
+			}
+			System.out.println("Total Año:"+total);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
