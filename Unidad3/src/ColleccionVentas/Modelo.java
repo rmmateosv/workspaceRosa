@@ -3,6 +3,9 @@ package ColleccionVentas;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XPathQueryService;
 
@@ -58,13 +61,105 @@ public class Modelo {
 	public void mostrarClientes() {
 		// TODO Auto-generated method stub
 		try {
+			//Creamos un servicio para hacer una consulta
 			XPathQueryService consulta = 
 					(XPathQueryService) 
 					col.getService("XPathQueryService", "1.0");
+			
+			//Ejecutamos la consulta XPATH/XQUERY
+			ResourceSet r = consulta.query("//clien");
+			
+			//Recuperamos el resultado
+			ResourceIterator i = r.getIterator();
+			while(i.hasMoreResources()) {
+				Resource cliente = i.nextResource();
+				System.out.println(cliente.getContent());
+			}
+			
+			
 		} catch (XMLDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public boolean insertarCliente(String nombre, String poblacion, String telefono, String direccion) {
+		// TODO Auto-generated method stub
+		boolean resultado = true;
+		int id = obtenerNuevoIdCliente();
+		try {
+			XPathQueryService consulta = (XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			String textoConsulta ="update insert "
+					+ "<clien numero='"+id+"'>"
+					+ "<nombre>"+nombre+"</nombre>"
+					+ "<poblacion>"+poblacion+"</poblacion>"
+					+ "<tlf>"+telefono+"</tlf>"
+					+ "<direccion>"+direccion+"</direccion>"
+					+"</clien> into /clientes"; 
+			consulta.query(textoConsulta);
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			resultado=false;
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	private int obtenerNuevoIdCliente() {
+		// TODO Auto-generated method stub
+		int resultado = 1;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("string(//clien[last()]/@numero)");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				String valor = i.nextResource().getContent().toString();
+				if(!valor.equals("")) {
+					resultado = Integer.parseInt(valor)+1;
+				}
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public boolean existeCliente(int id) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("//clien[@numero='"+id+"']");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				resultado = true;
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	public boolean modificarNombreCliente(int id, String nuevoNombre) {
+		// TODO Auto-generated method stub
+		boolean resultado = true;
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("update replace "
+					+ "//clien[@numero='"+id+"']/nombre with "
+					+ "<nombre>"+nuevoNombre + "</nombre>");
+			
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			resultado = false;
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 	
 	
