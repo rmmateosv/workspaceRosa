@@ -177,6 +177,28 @@ public class Modelo {
 		}
 		return resultado;
 	}
+	public void mostrarFacturas(int id) {
+		// TODO Auto-generated method stub
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			
+			ResourceSet r = consulta.query("for $c in /clientes/clien[@numero='"+id+"'],\r\n" + 
+					"    $f in /facturas/factura[numcliente=$c/@numero]\r\n" + 
+					"let $p := /detallefacturas//producto/..[@numero=$f/@numero]\r\n" + 
+					"return <factura fecha=\"{$f/fecha}\">\r\n" + 
+					"    {$p/producto}\r\n" + 
+					"</factura>");
+			ResourceIterator i = r.getIterator();
+			while(i.hasMoreResources()) {
+				System.out.println(i.nextResource().getContent());
+			}
+			
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 }

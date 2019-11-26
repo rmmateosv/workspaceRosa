@@ -17,6 +17,7 @@ public class Principal {
 				System.out.println("2-Insertar cliente");
 				System.out.println("3-Modificar nombre del cliente");
 				System.out.println("4-Borrar cliente");
+				System.out.println("5-Mostrar Facturas de un cliente");
 				opcion = t.nextInt();
 				t.nextLine();
 				int id;
@@ -66,7 +67,15 @@ public class Principal {
 					}
 					break;
 				case 5:
-
+					ventas.mostrarClientes();
+					System.out.println("Introduce id cliente");
+					id = t.nextInt();t.nextLine();
+					if(ventas.existeCliente(id)) {
+						ventas.mostrarFacturas(id);
+					}
+					else {
+						System.out.println("Error, no existe el cliente");
+					}
 					break;
 
 				}
