@@ -161,6 +161,22 @@ public class Modelo {
 		}
 		return resultado;
 	}
+	public boolean borrarCliente(int id) {
+		// TODO Auto-generated method stub
+		boolean resultado = true;
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("update delete "
+					+ "//clien[@numero = '"+id+"']");
+			
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			resultado = false;
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 	
 	
 }

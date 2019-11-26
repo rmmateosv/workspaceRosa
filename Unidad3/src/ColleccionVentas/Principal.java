@@ -16,12 +16,11 @@ public class Principal {
 				System.out.println("1-Mostrar clientes");
 				System.out.println("2-Insertar cliente");
 				System.out.println("3-Modificar nombre del cliente");
-
+				System.out.println("4-Borrar cliente");
 				opcion = t.nextInt();
 				t.nextLine();
-				
-				switch (opcion) {
-				
+				int id;
+				switch (opcion) {	
 				case 1:
 					ventas.mostrarClientes();
 					break;
@@ -42,7 +41,7 @@ public class Principal {
 				case 3:
 					ventas.mostrarClientes();
 					System.out.println("Introduce el id del cliente a modificar");
-					int id = t.nextInt();t.nextLine();
+					id = t.nextInt();t.nextLine();
 					if(ventas.existeCliente(id)) {
 						System.out.println("Nuevo Nombre");
 						String nuevoNombre = t.nextLine();
@@ -55,7 +54,16 @@ public class Principal {
 					}
 					break;
 				case 4:
-
+					ventas.mostrarClientes();
+					id = t.nextInt();t.nextLine();
+					if(ventas.existeCliente(id)) {
+						if(!ventas.borrarCliente(id)) {
+							System.out.println("Error al borrar el cliente");
+						}
+					}
+					else {
+						System.out.println("Error, el cliente no existe");
+					}
 					break;
 				case 5:
 
