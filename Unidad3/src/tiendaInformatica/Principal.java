@@ -23,6 +23,7 @@ public class Principal {
 				t.nextLine();
 				int id;
 				Pieza p;
+				Ordenador o;
 				switch (opcion) {	
 				case 1:
 					p=new Pieza();
@@ -37,10 +38,20 @@ public class Principal {
 					}
 					break;
 				case 2:
-					
+					tienda.mostrarPiezas();
 					break;
 				case 3:
-					
+					o= new Ordenador();
+					System.out.println("Introduce Codigo");
+					o.setCodigo(t.nextLine());
+					if(!tienda.existeOrdenador(o.getCodigo())) {
+						if(!tienda.insertarOrdenador(o)) {
+							System.out.println("Error al insertar el ordenador");
+						}
+					}
+					else {
+						System.out.println("Error: Ya existe un ordenador con ese código");
+					}
 					break;
 				case 4:
 					

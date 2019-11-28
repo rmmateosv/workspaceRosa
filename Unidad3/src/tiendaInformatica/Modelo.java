@@ -1,6 +1,7 @@
 package tiendaInformatica;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -108,6 +109,7 @@ public class Modelo {
 							+ "<precio>"+p.getPrecio()+"</precio>"
 					+ "</pieza>"
 					+ "into /piezas");
+			resultado=true;
 		} catch (XMLDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,9 +126,64 @@ public class Modelo {
 			ResourceSet r = consulta.query("string(/piezas/pieza[last()]/@codigo)");
 			ResourceIterator i = r.getIterator();
 			if(i.hasMoreResources()) {
-				resultado = Integer.parseInt(
-						i.nextResource().getContent().toString())+1;
+				String numero =i.nextResource().getContent().toString();
+				if(!numero.equals(""))
+					resultado = Integer.parseInt(numero)+1;
 			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public void mostrarPiezas() {
+		// TODO Auto-generated method stub
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("/piezas/pieza");
+			ResourceIterator i = r.getIterator();
+			while(i.hasMoreResources()) {
+				System.out.println(i.nextResource().getContent());
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public boolean existeOrdenador(String codigo) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("//ordenador[@codigo='"+codigo+"']");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				resultado = true;
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public boolean insertarOrdenador(Ordenador o) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+			
+			XPathQueryService consulta = (XPathQueryService) col.getService("XPathQueryService", "1.0");
+			consulta.query("update insert "
+					+ "<ordenador codigo='"+o.getCodigo()+"' fecha='"+
+					              formato.format(o.getFecha())+"'>"
+					      + "<piezas/>"
+					+"</ordenador>"
+					+ "into /ordenadores");
+			resultado=true;
 		} catch (XMLDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Ordenador {
-	private int codigo;
-	private Date fecha;
+	private String codigo;
+	private Date fecha=new Date();
 	private ArrayList<Componente> piezas = new ArrayList<Componente>();
-	public Ordenador(int codigo, Date fecha, ArrayList<Componente> piezas) {
+	public Ordenador(String codigo, Date fecha, ArrayList<Componente> piezas) {
 		super();
 		this.codigo = codigo;
 		this.fecha = fecha;
@@ -17,10 +17,10 @@ public class Ordenador {
 	public Ordenador() {
 		
 	}
-	public int getCodigo() {
+	public String getCodigo() {
 		return codigo;
 	}
-	public void setCodigo(int codigo) {
+	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 	public Date getFecha() {
