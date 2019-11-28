@@ -22,9 +22,19 @@ public class Principal {
 				opcion = t.nextInt();
 				t.nextLine();
 				int id;
+				Pieza p;
 				switch (opcion) {	
 				case 1:
-					
+					p=new Pieza();
+					System.out.println("Introduce Nombre");
+					p.setNombre(t.nextLine());
+					System.out.println("Introduce stock");
+					p.setStock(t.nextInt());t.nextLine();
+					System.out.println("Introduce Precio");
+					p.setPrecio(t.nextFloat());t.nextLine();
+					if(!tienda.insertarPieza(p)) {
+						System.out.println("Error al insertar la pieza");
+					}
 					break;
 				case 2:
 					

@@ -6,8 +6,11 @@ import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
+import org.xmldb.api.modules.XPathQueryService;
 
 public class Modelo {
 
@@ -89,5 +92,45 @@ public class Modelo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public boolean insertarPieza(Pieza p) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		
+		p.setCodigo(obtenerCodigoPieza());
+		p.setAlta(true);
+		try {
+			XPathQueryService consulta = (XPathQueryService) col.getService("XPathQueryService", "1.0");
+			consulta.query("update insert "
+					+ "<pieza codigo='"+p.getCodigo()+"' alta='"+p.isAlta()+"'>"
+							+ "<nombre>"+p.getNombre()+"</nombre>"
+							+ "<stock>"+p.getStock()+"</stock>"
+							+ "<precio>"+p.getPrecio()+"</precio>"
+					+ "</pieza>"
+					+ "into /piezas");
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	private int obtenerCodigoPieza() {
+		// TODO Auto-generated method stub
+		int resultado = 1;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("string(/piezas/pieza[last()]/@codigo)");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				resultado = Integer.parseInt(
+						i.nextResource().getContent().toString())+1;
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 }
