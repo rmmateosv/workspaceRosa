@@ -8,6 +8,13 @@ public class Ordenador {
 	private String codigo;
 	private Date fecha=new Date();
 	private ArrayList<Componente> piezas = new ArrayList<Componente>();
+	private float precio=0;
+	public float getPrecio() {
+		return precio;
+	}
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
 	public Ordenador(String codigo, Date fecha, ArrayList<Componente> piezas) {
 		super();
 		this.codigo = codigo;

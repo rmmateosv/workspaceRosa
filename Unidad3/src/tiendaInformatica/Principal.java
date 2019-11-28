@@ -54,10 +54,44 @@ public class Principal {
 					}
 					break;
 				case 4:
-					
+					tienda.mostrarOrdenadores();
 					break;
 				case 5:
-					
+					//Pedimos ordenador
+					tienda.mostrarOrdenadores();
+					System.out.println("Introduce el código del ordenador");
+					o = new Ordenador();
+					o.setCodigo(t.nextLine());
+					if(tienda.existeOrdenador(o.getCodigo())) {
+						//Si existe pedimos piezas
+						tienda.mostrarPiezas();
+						p = new Pieza();
+						System.out.println("Introduce código de pieza");
+						p.setCodigo(t.nextInt());t.nextLine();
+						//Si existe y hay stock suficiente, 
+						if(tienda.existePieza(p.getCodigo())) {
+							p.setStock(tienda.obtenerStock(p.getCodigo()));
+							System.out.println("Introduce cantidad");
+							int cantidad = t.nextInt();t.nextLine();
+							if(p.getStock()>=cantidad) {
+								//añadimos pieza a ordenador,
+								if(!tienda.addPieza(o,p,cantidad)){
+									System.out.println("Error al añadir pieza");
+								}
+								else {
+								//actualizamos el precio
+									
+								// y actualizamos el stock de la pieza
+								}
+							}
+						}
+						else {
+							System.out.println("Error: No existe la pieza");
+						}
+					}
+					else {
+						System.out.println("Error: No existe el ordenador");
+					}
 					break;
 
 				}

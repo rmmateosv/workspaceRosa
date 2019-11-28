@@ -190,4 +190,75 @@ public class Modelo {
 		}
 		return resultado;
 	}
+	public void mostrarOrdenadores() {
+		// TODO Auto-generated method stub
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("//ordenador");
+			ResourceIterator i = r.getIterator();
+			while(i.hasMoreResources()) {
+				System.out.println(i.nextResource().getContent());
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public boolean existePieza(int codigo) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("/piezas/pieza[@codigo='"+codigo+"']");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				resultado = true;
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public int obtenerStock(int codigo) {
+		// TODO Auto-generated method stub
+		int resultado = 0;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("string(/piezas/pieza[@codigo='"+codigo+"']/stock)");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				String numero =i.nextResource().getContent().toString();
+				if(!numero.equals(""))
+					resultado = Integer.parseInt(numero);
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public boolean addPieza(Ordenador o, Pieza p, int cantidad) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+					
+			XPathQueryService consulta = (XPathQueryService) col.getService("XPathQueryService", "1.0");
+			consulta.query("update insert "
+					+ "<pieza codigo='"+p.getCodigo()+"' cantidad='"+
+					              cantidad+"'/>"
+					+ "into //ordenador[@codigo='"+o.getCodigo()+"']/piezas");
+			resultado=true;
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 }
