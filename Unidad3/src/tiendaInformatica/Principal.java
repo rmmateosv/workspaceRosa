@@ -79,9 +79,15 @@ public class Principal {
 									System.out.println("Error al añadir pieza");
 								}
 								else {
-								//actualizamos el precio
+									//actualizamos el precio
+									if(!tienda.actualizarPrecioOrd(o,p,cantidad)) {
+										System.out.println("Error al actualizar el precio del ordenador");
+									}
+									// y actualizamos el stock de la pieza
+									if(!tienda.actualizarStock(p,cantidad)) {
+										System.out.println("Error al actualizar el stock de la pieza");
+									}
 									
-								// y actualizamos el stock de la pieza
 								}
 							}
 						}

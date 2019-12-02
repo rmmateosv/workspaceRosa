@@ -180,7 +180,8 @@ public class Modelo {
 			consulta.query("update insert "
 					+ "<ordenador codigo='"+o.getCodigo()+"' fecha='"+
 					              formato.format(o.getFecha())+"'>"
-					      + "<piezas/>"
+					      + "<piezas/>" +
+					        "<precio>0</precio>"      
 					+"</ordenador>"
 					+ "into /ordenadores");
 			resultado=true;
@@ -255,6 +256,85 @@ public class Modelo {
 					              cantidad+"'/>"
 					+ "into //ordenador[@codigo='"+o.getCodigo()+"']/piezas");
 			resultado=true;
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public boolean actualizarPrecioOrd(Ordenador o, Pieza p, int cantidad) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		float precio = obtenerPrecioPieza(p.getCodigo());
+		float precioOrdenador = obtenerPrecioOrdenador(o.getCodigo());
+		
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			consulta.query("update replace //ordenador[@codigo='"+ o.getCodigo()+
+					"']/precio with <precio>" + 
+					(precioOrdenador + precio * cantidad) +"</precio>");
+			resultado = true;
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	private float obtenerPrecioOrdenador(String codigo) {
+		// TODO Auto-generated method stub
+		float resultado = 0;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("string(//ordenador[@codigo='"+
+					codigo+"']/precio)");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				String numero =i.nextResource().getContent().toString();
+				if(!numero.equals(""))
+					resultado = Float.parseFloat(numero);
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	private float obtenerPrecioPieza(int codigo) {
+		// TODO Auto-generated method stub
+		float resultado = 0;
+		try {
+			XPathQueryService consulta = 
+					(XPathQueryService) 
+					col.getService("XPathQueryService", "1.0");
+			ResourceSet r = consulta.query("string(/piezas/pieza[@codigo='"+
+					codigo+"']/precio)");
+			ResourceIterator i = r.getIterator();
+			if(i.hasMoreResources()) {
+				String numero =i.nextResource().getContent().toString();
+				if(!numero.equals(""))
+					resultado = Float.parseFloat(numero);
+			}
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	
+	public boolean actualizarStock(Pieza p, int cantidad) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			XPathQueryService consulta = (XPathQueryService)
+					col.getService("XPathQueryService", "1.0");
+			consulta.query("update replace /piezas/pieza[@codigo='"+ p.getCodigo()+
+					"']/stock with <stock>" + 
+					(p.getStock()-cantidad) +"</stock>");
+			resultado = true;
 		} catch (XMLDBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
