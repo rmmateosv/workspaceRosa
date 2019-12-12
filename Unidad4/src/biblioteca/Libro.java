@@ -1,12 +1,27 @@
 package biblioteca;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Libro {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="libro")
+public class Libro  implements Serializable{
+	@Column(name="isbn",nullable = false)
+	@Id
 	private String isbn;
+	@Column(nullable = false)
 	private int numEjemplares;
+	@Column(nullable = false)
 	private String titulo;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "id.libro")
 	private List<Prestamo> prestamos = new ArrayList<Prestamo>();
 	public Libro() {
 		super();

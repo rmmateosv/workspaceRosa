@@ -1,15 +1,31 @@
 package biblioteca;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Socio {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+@Entity
+@Table
+public class Socio  implements Serializable{
+	@Column(nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false, unique = true)
 	private String nif;
+	@Column(nullable = false)
 	private String nombre;
+	@Column(nullable = false)
 	private boolean sancionado;
-	
-	private List<Prestamo> prestamos = new ArrayList<Prestamo>;
+	@OneToMany(mappedBy = "id.socio")
+	private List<Prestamo> prestamos = new ArrayList<Prestamo>();
 	
 	public Socio() {
 		super();
@@ -53,9 +69,9 @@ public class Socio {
 		this.prestamos = prestamos;
 	}
 	
-	public void mostrar(boolean motrarP) {
+	public void mostrar(boolean mostrarP) {
 		System.out.println("ID:"+id + 
-				"\tNIF:"+NIF+
+				"\tNIF:"+nif+
 				"\tNombre:"+nombre+
 				"\tSancionado:"+sancionado);
 		if(mostrarP) {
