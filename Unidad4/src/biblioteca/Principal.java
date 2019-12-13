@@ -28,9 +28,41 @@ public class Principal {
 				System.out.println("11-Borrar un socio con o sin préstamos");
 				opcion = t.nextInt();t.nextLine();
 				
+				Socio s;
+				Libro l;
 				switch(opcion) {
 				case 1:
-					
+					s = new Socio();
+					System.out.println("Introduce Nif");
+					s.setNif(t.nextLine());
+					if((biblioteca.obtenerSocio(s))==null) {
+						System.out.println("Nombre");
+						s.setNombre(t.nextLine());
+						s.setSancionado(false);
+						if(!biblioteca.crearSocio(s)) {
+							System.out.println("Error al crear el socio");
+						}
+					}
+					else {
+						System.out.println("Error: Ya existe un socio con ese NIF");
+					}
+					break;
+				case 2:
+					l = new Libro();
+					System.out.println("Isbn:");
+					l.setIsbn(t.nextLine());
+					if((biblioteca.obtenerLibro(l))==null) {
+						System.out.println("Ejemplares");
+						l.setNumEjemplares(t.nextInt());t.nextLine();
+						System.out.println("Título");
+						l.setTitulo(t.nextLine());
+						if(!biblioteca.altaLibro(l)) {
+							System.out.println("Error al crear libro");
+						}
+					}
+					else {
+						System.out.println("Error: Ya existe");
+					}
 					break;
 				case 3:
 					
