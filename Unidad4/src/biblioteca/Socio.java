@@ -16,6 +16,7 @@ import javax.persistence.Table;
 public class Socio  implements Serializable{
 	@Column(nullable = false)
 	@Id
+	//Indicamos que la clave es automunérica
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(nullable = false, unique = true)

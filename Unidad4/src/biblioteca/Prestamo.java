@@ -13,9 +13,13 @@ import javax.persistence.TemporalType;
 @Entity
 @Table
 public class Prestamo  implements Serializable{
+	//Indicamos que la clave está formada por más de un campo en la tabla
+	//Para ello creamos un clase que contenga todos los campos de la 
+	//clave
 	@EmbeddedId
 	private PrestamoClave id;
 	@Column(nullable = false)
+	//Indicamos que el atributo es una fecha
 	@Temporal(TemporalType.DATE)
 	private Date fechaDevolPrevista;
 	@Column

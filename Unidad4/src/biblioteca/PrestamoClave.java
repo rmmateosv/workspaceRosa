@@ -11,11 +11,17 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 public class PrestamoClave implements Serializable{
+	//Definimos la clave externa
 	@ManyToOne
-	@JoinColumn(columnDefinition = "isbn")
+	//Indicamos el nombre del campo ya que si no se pone un nombre
+	//que concatena el texto id
+	//Indicamos el atributo de la clase Libro que contiene la 
+	// clave primaria de un libro
+	@JoinColumn(name="libro", referencedColumnName = "isbn")
 	private Libro libro;
 	@ManyToOne
-	@JoinColumn(columnDefinition = "id")
+	@JoinColumn(name="socio", referencedColumnName = "id")
+	
 	private Socio socio;
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
