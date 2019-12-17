@@ -8,6 +8,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+
+
 public class Modelo {
 	private EntityManager em = null;
 
@@ -110,5 +112,53 @@ public class Modelo {
 			e.printStackTrace();
 		}
 		return resultado;
+	}
+
+	public void mostrarLibros() {
+		// TODO Auto-generated method stub
+		try {
+			Query consulta = em.createQuery("from Libro");
+			List<Libro> r = consulta.getResultList();
+			for(Libro l : r) {
+				l.mostrar(false);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+	}
+
+	public boolean modificarLibro(Libro l) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		EntityTransaction t = null;
+		try {
+			t=em.getTransaction();
+			t.begin();
+			em.merge(l);
+			t.commit();
+			resultado=true;
+					
+		} catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public void mostrarSocios() {
+		// TODO Auto-generated method stub
+		try {
+			Query consulta = em.createQuery("from Socio");
+			List<Socio> r = consulta.getResultList();
+			for(Socio s : r) {
+				s.mostrar(false);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 }

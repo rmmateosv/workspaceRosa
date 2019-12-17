@@ -65,10 +65,75 @@ public class Principal {
 					}
 					break;
 				case 3:
-					
+					biblioteca.mostrarLibros();
+					System.out.println("Introudce ISBN");
+					l = new Libro();
+					l.setIsbn(t.nextLine());
+					l=biblioteca.obtenerLibro(l);
+					if(l!=null) {
+						System.out.println("Introduce nuevo nº de ejemplares");
+						l.setNumEjemplares(t.nextInt());t.nextLine();
+						if(!biblioteca.modificarLibro(l)) {
+							System.out.println("Error al modificar el nº de ejemplares");
+						}
+					}
+					else {
+						System.out.println("Error, no existe el libro");
+					}
 					break;
 				case 4:
-					
+					biblioteca.mostrarSocios();
+					s = new Socio();
+					System.out.println("Introduce NIF");
+					s.setNif(t.nextLine());
+					s=biblioteca.obtenerSocio(s);
+					if(s!=null) {
+						s.mostrar(true);
+						if(!s.isSancionado()) {
+							//Calculamos el nº de préstamos sin devolver
+							//Se puede hacer de dos forma, recorriendo la 
+							//lista de préstamos del socio o
+							//ejecutando una consulta a la BD
+							//Lo hacemos de las dos formas y dejarems 
+							//una de las dos comentada
+							int numPrestamosPtes=0;
+							for(Prestamo p:s.getPrestamos()) {
+								if(p.getFechaDevolReal()==null) {
+									numPrestamosPtes++;
+								}
+							}
+							if(numPrestamosPtes<2) {
+								biblioteca.mostrarLibros();
+								System.out.println("Introduce ISBN");
+								l= new Libro();
+								l.setIsbn(t.nextLine());
+								l=biblioteca.obtenerLibro(l);
+								if(l!=null) {
+									if(l.getNumEjemplares()>=1) {
+										if(!biblioteca.crearPrestamo(s,l)){
+											System.out.println("Error al crear el préstamo");
+										}
+									}
+									else {
+										System.out.println("Error, no hay ejemplares suficientes");
+									}
+								}
+								else {
+									System.out.println("Error, no existe el libro");
+								}
+								
+							}
+							else {
+								System.out.println("Error, tiene 2 o más préstamos sin devolver");
+							}
+						}
+						else {
+							System.out.println("Error, socio sancionado");
+						}
+					}
+					else {
+						System.out.println("Error, socio no existe");
+					}
 					break;
 				case 5:
 					
