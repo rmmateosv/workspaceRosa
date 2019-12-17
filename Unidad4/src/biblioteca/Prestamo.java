@@ -55,10 +55,17 @@ public class Prestamo  implements Serializable{
 	
 	public void mostrar() {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		String fDevol;
+		if(fechaDevolReal==null) {
+			fDevol="";
+		}
+		else{
+			fDevol=formato.format(fechaDevolReal);
+		}
 		System.out.println("ISBN:"+id.getLibro().getIsbn()+
 				"\tSocio:"+id.getSocio().getNif()+
 				"\tFecha Préstamo:"+formato.format(id.getFechaP())+
 				"\tFecha Prevista Devol:"+formato.format(fechaDevolPrevista)+
-				"\tFecha Real Devol:"+formato.format(fechaDevolReal));
+				"\tFecha Real Devol:"+fDevol);
 	}
 }

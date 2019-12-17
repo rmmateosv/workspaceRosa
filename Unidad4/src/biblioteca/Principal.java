@@ -96,12 +96,14 @@ public class Principal {
 							//ejecutando una consulta a la BD
 							//Lo hacemos de las dos formas y dejarems 
 							//una de las dos comentada
-							int numPrestamosPtes=0;
-							for(Prestamo p:s.getPrestamos()) {
+							long numPrestamosPtes=0;
+							/*for(Prestamo p:s.getPrestamos()) {
 								if(p.getFechaDevolReal()==null) {
 									numPrestamosPtes++;
 								}
-							}
+							}*/
+							numPrestamosPtes = biblioteca.obtenerPrestPtes(s);
+							
 							if(numPrestamosPtes<2) {
 								biblioteca.mostrarLibros();
 								System.out.println("Introduce ISBN");
@@ -136,7 +138,40 @@ public class Principal {
 					}
 					break;
 				case 5:
-					
+					biblioteca.mostrarSocios();
+					System.out.println("Introduce NIF");
+					s = new Socio();
+					s.setNif(t.nextLine());
+					s=biblioteca.obtenerSocio(s);
+					if(s!=null) {
+						s.mostrar(true);
+						System.out.println("Introduce ISBN");
+						l = new Libro();
+						l.setIsbn(t.nextLine());
+						l = biblioteca.obtenerLibro(l);
+						if(l!=null) {
+							//Rellenamos la fecha real de devolucion
+							//del préstamo
+							for(Prestamo p :s.getPrestamos()) {
+								if(p.getId().getLibro()==l && 
+										p.getFechaDevolReal()==null) {
+									
+									if(!biblioteca.devolverPrestamo(p)) {
+										System.out.println("Error al devolver el préstamo");
+									}
+								}
+							}
+						}
+						else {
+							System.out.println("Error, libro no existe");
+						}
+					}
+					else {
+						System.out.println("Error, socio no existe");
+					}
+					break;
+				case 7:
+					biblioteca.mostrarPrestamosPtes();
 					break;
 				
 				}

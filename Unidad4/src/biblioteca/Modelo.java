@@ -1,5 +1,7 @@
 package biblioteca;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -136,7 +138,7 @@ public class Modelo {
 		try {
 			t=em.getTransaction();
 			t.begin();
-			em.merge(l);
+			//em.merge(l);
 			t.commit();
 			resultado=true;
 					
@@ -160,5 +162,113 @@ public class Modelo {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+	}
+
+	public boolean crearPrestamo(Socio s, Libro l) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		EntityTransaction t = null;
+		try {
+			//Calculamos la fecha de devolucion
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			c.add(Calendar.DAY_OF_MONTH, 15);
+			Prestamo p = new Prestamo(
+					new PrestamoClave(l, s, new Date()), 
+					c.getTime(), 
+					null);
+			//Otra forma de sumar días a una fecha. Pasar el nº de dias
+			//a miliseg. 15 días = 1296000000 ms
+			/*Prestamo p = new Prestamo(
+					new PrestamoClave(l, s, new Date()), 
+					new Date((new Date()).getTime()+1296000000), 
+					null);*/
+			t=em.getTransaction();
+			t.begin();
+			em.persist(p);
+			//Disminuímos el nº de ejemplares
+			l.setNumEjemplares(l.getNumEjemplares()-1);
+			//limpiamos caché de em para que se actualicen los cambios
+			t.commit();
+			em.clear();
+			resultado=true;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public long obtenerPrestPtes(Socio s) {
+		// TODO Auto-generated method stub
+		long resultado = 0;
+		try {
+			Query consulta = em.createQuery(
+					"select count(*) from Prestamo "
+					+ "where id.socio = :id and "
+					+ "fechaDevolReal is null");
+			consulta.setParameter("idXX", s);
+			List<Long> r = consulta.getResultList();
+			
+			resultado = r.get(0);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public boolean devolverPrestamo(Prestamo p) {
+		// TODO Auto-generated method stub
+		boolean resultado = true;
+		EntityTransaction t = null;
+		try {
+			t = em.getTransaction();
+			t.begin();
+			p.setFechaDevolReal(new Date());
+			
+			p.getId().getLibro().setNumEjemplares
+			(p.getId().getLibro().getNumEjemplares()+1);
+			
+			//Calculamos la fecha de sanción
+			if(p.getFechaDevolPrevista().getTime()<p.getFechaDevolReal().getTime()) {
+				p.getId().getSocio().setSancionado(true);
+			}
+			
+			t.commit();
+			resultado=true;
+			em.clear();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public void mostrarPrestamosPtes() {
+		// TODO Auto-generated method stub
+		try {
+			Query consulta = 
+					em.createQuery("select count(*), id.socio.nif, id.socio.nombre "
+							+ "from Prestamo "
+							+ "where fechaDevolReal is null "
+							+ "group by id.socio");
+			List<Object[]> r = consulta.getResultList();
+			for(Object[] o : r) {
+				System.out.println("Nº Prestamos Ptes:"+ (Long) o[0]+
+						"\tNIF:" + (String) o[1] +
+						"\tNombre Socio:" + (String) o[2]);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
 	}
 }
