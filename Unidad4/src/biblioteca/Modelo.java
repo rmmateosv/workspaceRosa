@@ -236,6 +236,7 @@ public class Modelo {
 			//Calculamos la fecha de sanción
 			if(p.getFechaDevolPrevista().getTime()<p.getFechaDevolReal().getTime()) {
 				p.getId().getSocio().setSancionado(true);
+				p.getId().getSocio().setFechaSancion(new Date(new Date().getTime() + 1296000000));
 			}
 			
 			t.commit();
@@ -324,6 +325,17 @@ public class Modelo {
 				System.out.println("Nº Prestamos Ptes:"+ o);
 			}
 			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	public void info() {
+		// TODO Auto-generated method stub
+		try {
 			Query consulta2 = em.createQuery("select count(*), sum(numEjemplares) "
 					+ "from Libro ");
 			List<Object[]> r2 = consulta2.getResultList();
@@ -331,11 +343,11 @@ public class Modelo {
 				System.out.println("Nº Libros: "+ (Long) o[0] + 
 						"\tNº Ejemplares"+ (Long) o[1]);
 			}
-			
-			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		
+		
 	}
 }

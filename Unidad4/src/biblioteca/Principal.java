@@ -2,6 +2,7 @@ package biblioteca;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -89,7 +90,9 @@ public class Principal {
 					s=biblioteca.obtenerSocio(s);
 					if(s!=null) {
 						s.mostrar(true);
-						if(!s.isSancionado()) {
+						if(!s.isSancionado() || 
+								s.getFechaSancion()==null || 
+								s.getFechaSancion().getTime() < new Date().getTime()) {
 							//Calculamos el nº de préstamos sin devolver
 							//Se puede hacer de dos forma, recorriendo la 
 							//lista de préstamos del socio o
@@ -170,11 +173,27 @@ public class Principal {
 						System.out.println("Error, socio no existe");
 					}
 					break;
+				case 6:
+					biblioteca.mostrarSocios();
+					s = new Socio();
+					System.out.println("NIF");
+					s.setNif(t.nextLine());
+					s = biblioteca.obtenerSocio(s);
+					if(s!=null) {
+						s.mostrar(true);
+					}
+					else {
+						System.out.println("Error, socio no existe");
+					}
+					break;
 				case 7:
 					biblioteca.mostrarPrestamosPtes();
 					break;
 				case 8:
 					biblioteca.numPrestamosPtes();
+					break;
+				case 9:
+					biblioteca.info();
 					break;
 				case 10:
 					biblioteca.mostrarLibros();
