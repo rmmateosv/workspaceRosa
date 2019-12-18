@@ -24,8 +24,8 @@ public class Principal {
 				System.out.println("7-Mostrar el nº de préstamos pendientes de cada socio");
 				System.out.println("8-Mostrar el nº de préstamos pendientes de devolución");
 				System.out.println("9-Mostrar el nº de libros y el nº de ejemplares totales de la biblioteca");
-				System.out.println("10-Borrar un libro con o sin préstamos");
-				System.out.println("11-Borrar un socio con o sin préstamos");
+				System.out.println("10-Borrar un libro con o sin préstamos/Borrado en cascada");
+				System.out.println("11-Borrar un socio con o sin préstamos/Borrado restringido");
 				opcion = t.nextInt();t.nextLine();
 				
 				Socio s;
@@ -172,6 +172,45 @@ public class Principal {
 					break;
 				case 7:
 					biblioteca.mostrarPrestamosPtes();
+					break;
+				case 8:
+					biblioteca.numPrestamosPtes();
+					break;
+				case 10:
+					biblioteca.mostrarLibros();
+					l = new Libro();
+					System.out.println("Isbn:");
+					l.setIsbn(t.nextLine());
+					l=biblioteca.obtenerLibro(l);
+					if(l!=null) {
+						if(l.getPrestamos().size()>0) {
+							System.out.println("Libro con préstamos -> se borran tb los préstamos");
+						}
+						if(!biblioteca.borrarLibro(l)) {
+							System.out.println("Error al borrar el libro");
+						}
+					}
+					else {
+						System.out.println("Error, libro no existe");
+					}
+					break;
+				case 11:
+					biblioteca.mostrarSocios();
+					s = new Socio();
+					System.out.println("NIF:");
+					s.setNif(t.nextLine());
+					s=biblioteca.obtenerSocio(s);
+					if(s!=null) {
+						if(s.getPrestamos().size()>0) {
+							System.out.println("No se va a borrar, va a dar un error");
+						}
+						if(!biblioteca.borrarSocio(s)) {
+							System.out.println("Error al borrar el socio");
+						}
+					}
+					else {
+						System.out.println("Error, socio no existe");
+					}
 					break;
 				
 				}

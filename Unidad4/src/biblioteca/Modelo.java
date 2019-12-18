@@ -271,4 +271,71 @@ public class Modelo {
 		}
 		
 	}
+
+	public boolean borrarLibro(Libro l) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		EntityTransaction t = null;
+		try {
+			t= em.getTransaction();
+			t.begin();
+			em.remove(l);
+			t.commit();
+			resultado=true;
+			em.clear();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public boolean borrarSocio(Socio s) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		EntityTransaction t = null;
+		try {
+			t= em.getTransaction();
+			t.begin();
+			em.remove(s);
+			t.commit();
+			resultado=true;
+			em.clear();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public void numPrestamosPtes() {
+		// TODO Auto-generated method stub
+		try {
+			Query consulta = 
+					em.createQuery("select count(*) "
+							+ "from Prestamo "
+							+ "where fechaDevolReal is null ");
+			List<Long> r = consulta.getResultList();
+			for(Long o : r) {
+				System.out.println("Nº Prestamos Ptes:"+ o);
+			}
+			
+			Query consulta2 = em.createQuery("select count(*), sum(numEjemplares) "
+					+ "from Libro ");
+			List<Object[]> r2 = consulta2.getResultList();
+			for(Object[] o : r2) {
+				System.out.println("Nº Libros: "+ (Long) o[0] + 
+						"\tNº Ejemplares"+ (Long) o[1]);
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 }
