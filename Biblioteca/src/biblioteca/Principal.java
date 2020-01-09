@@ -38,8 +38,7 @@ public class Principal {
 					s.setNif(t.nextLine());
 					if((biblioteca.obtenerSocio(s))==null) {
 						System.out.println("Nombre");
-						s.setNombre(t.nextLine());
-						s.setSancionado(false);
+						s.setNombre(t.nextLine());	
 						if(!biblioteca.crearSocio(s)) {
 							System.out.println("Error al crear el socio");
 						}
@@ -90,8 +89,7 @@ public class Principal {
 					s=biblioteca.obtenerSocio(s);
 					if(s!=null) {
 						s.mostrar(true);
-						if(!s.isSancionado() || 
-								s.getFechaSancion()==null || 
+						if(s.getFechaSancion()==null || 
 								s.getFechaSancion().getTime() < new Date().getTime()) {
 							//Calculamos el nº de préstamos sin devolver
 							//Se puede hacer de dos forma, recorriendo la 

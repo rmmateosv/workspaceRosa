@@ -27,8 +27,6 @@ public class Socio  implements Serializable{
 	private String nif;
 	@Column(nullable = false)
 	private String nombre;
-	@Column(nullable = false)
-	private boolean sancionado;
 	@OneToMany(mappedBy = "id.socio")
 	private List<Prestamo> prestamos = new ArrayList<Prestamo>();
 	@Column(nullable = true)
@@ -38,12 +36,11 @@ public class Socio  implements Serializable{
 	public Socio() {
 		super();
 	}
-	public Socio(int id, String nif, String nombre, boolean sancionado, List<Prestamo> prestamos) {
+	public Socio(int id, String nif, String nombre,List<Prestamo> prestamos) {
 		super();
 		this.id = id;
 		this.nif = nif;
 		this.nombre = nombre;
-		this.sancionado = sancionado;
 		this.prestamos = prestamos;
 	}
 	public int getId() {
@@ -64,12 +61,7 @@ public class Socio  implements Serializable{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public boolean isSancionado() {
-		return sancionado;
-	}
-	public void setSancionado(boolean sancionado) {
-		this.sancionado = sancionado;
-	}
+	
 	public List<Prestamo> getPrestamos() {
 		return prestamos;
 	}
@@ -86,7 +78,6 @@ public class Socio  implements Serializable{
 		System.out.println("ID:"+id + 
 				"\tNIF:"+nif+
 				"\tNombre:"+nombre+
-				"\tSancionado:"+sancionado + 
 				"\tFecha Sanción:" + f);
 		if(mostrarP) {
 			System.out.println("Préstamos del libro");

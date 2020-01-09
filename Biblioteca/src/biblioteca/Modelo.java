@@ -209,7 +209,7 @@ public class Modelo {
 					"select count(*) from Prestamo "
 					+ "where id.socio = :id and "
 					+ "fechaDevolReal is null");
-			consulta.setParameter("idXX", s);
+			consulta.setParameter("id", s);
 			List<Long> r = consulta.getResultList();
 			
 			resultado = r.get(0);
@@ -235,7 +235,6 @@ public class Modelo {
 			
 			//Calculamos la fecha de sanción
 			if(p.getFechaDevolPrevista().getTime()<p.getFechaDevolReal().getTime()) {
-				p.getId().getSocio().setSancionado(true);
 				p.getId().getSocio().setFechaSancion(new Date(new Date().getTime() + 1296000000));
 			}
 			
@@ -349,5 +348,41 @@ public class Modelo {
 		}
 		
 		
+	}
+	public List<Libro> obtenerLibros(){
+		List<Libro> resultado=null;
+		try {
+			Query consulta = em.createQuery("from Libro");
+			resultado = consulta.getResultList();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public List<Socio> obtenerSocios(){
+		List<Socio> resultado=null;
+		try {
+			Query consulta = em.createQuery("from Socio");
+			resultado = consulta.getResultList();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+	public List<Prestamo> obtenerPrestamos(){
+		List<Prestamo> resultado=null;
+		try {
+			Query consulta = em.createQuery("from Socio");
+			resultado = consulta.getResultList();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return resultado;
 	}
 }
