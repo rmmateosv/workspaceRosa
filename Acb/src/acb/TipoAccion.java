@@ -1,12 +1,29 @@
 package acb;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tipoaccion")
 public class TipoAccion {
+	@Column(nullable = false)
+	@Id
 	private String tipo;
+	
+	@Column(name="descrip", nullable = false)
 	private String descripcion;
 	
-	private ArrayList<Accion> acciones = new ArrayList<Accion>();
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "tipo")
+	private List<Accion> acciones = new ArrayList<Accion>();
 	
 	public TipoAccion() {
 		super();
@@ -33,7 +50,7 @@ public class TipoAccion {
 		System.out.println("Tipo Acción:"+tipo+" " + descripcion );
 	}
 	
-	public ArrayList<Accion> getAcciones() {
+	public List<Accion> getAcciones() {
 		return acciones;
 	}
 	public void setAcciones(ArrayList<Accion> acciones) {

@@ -1,16 +1,32 @@
 package acb;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class Equipo {
+	@Column(nullable = false)
+	@Id
 	private String nombre;
+	@Column(nullable = false)
 	private String localidad;
 	
-	ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "equipo")
+	List<Jugador> jugadores = new ArrayList<Jugador>();
 	
-	ArrayList<Partido> partidosL = new ArrayList<Partido>();
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "local")
+	List<Partido> partidosL = new ArrayList<Partido>();
 	
-	ArrayList<Partido> partidosV = new ArrayList<Partido>();
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "visitante")
+	List<Partido> partidosV = new ArrayList<Partido>();
 	
 	public Equipo() {
 		super();
@@ -33,22 +49,22 @@ public class Equipo {
 		this.localidad = localidad;
 	}
 	
-	public ArrayList<Jugador> getJugadores() {
+	public List<Jugador> getJugadores() {
 		return jugadores;
 	}
 	public void setJugadores(ArrayList<Jugador> jugadores) {
 		this.jugadores = jugadores;
 	}
-	public ArrayList<Partido> getPartidosL() {
+	public List<Partido> getPartidosL() {
 		return partidosL;
 	}
 	public void setPartidosL(ArrayList<Partido> partidosL) {
 		this.partidosL = partidosL;
 	}
-	public ArrayList<Partido> getPartidosV() {
+	public List<Partido> getPartidosV() {
 		return partidosV;
 	}
-	public void setPartidosV(ArrayList<Partido> partidosV) {
+	public void setPartidosV(List<Partido> partidosV) {
 		this.partidosV = partidosV;
 	}
 	public void mostrar() {
