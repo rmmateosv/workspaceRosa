@@ -1,5 +1,6 @@
 package acb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Partido {
+public class Partido implements Serializable{
 	@Column(nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

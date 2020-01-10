@@ -1,5 +1,7 @@
 package acb;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Accion {
+public class Accion implements Serializable{
 	@Column(nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ public class Accion {
 	public Accion() {
 		super();
 	}
-	public Accion(int codigo, Partido partido, TipoAccion tipo, Jugador jugador, boolean anulada) {
+	public Accion(Partido partido, TipoAccion tipo, Jugador jugador, boolean anulada) {
 		super();
 		this.codigo = codigo;
 		this.partido = partido;

@@ -1,5 +1,6 @@
 package acb;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Jugador {
+public class Jugador implements Serializable{
 	@Column(nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,7 +88,7 @@ public class Jugador {
 	public void setAcciones(ArrayList<Accion> acciones) {
 		this.acciones = acciones;
 	}
-	private void mostrar() {
+	public void mostrar() {
 		System.out.println("Código:" + codigo + 
 				"\tEquipo:"+equipo.getNombre() + 
 				"\tDorsal" + dorsal + 
