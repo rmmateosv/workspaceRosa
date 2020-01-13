@@ -119,5 +119,29 @@ public class Modelo {
 		}
 		return resultado;
 	}
+
+	public boolean anularAccion(Accion a) {
+		// TODO Auto-generated method stub
+		boolean resultado=false;
+		
+		EntityTransaction t = null;
+		try {
+			t= em.getTransaction();
+			t.begin();
+			
+			a.setAnulada(true);
+			
+			t.commit();
+			resultado= true;
+			em.clear();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			t.rollback();
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
 	
 }
