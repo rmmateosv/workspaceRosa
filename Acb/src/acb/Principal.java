@@ -71,7 +71,7 @@ public class Principal {
 					}
 					break;
 				case 3:
-					pSel = acb.obtenerPartido(pSel);
+					//pSel = acb.obtenerPartido(pSel);
 					if (pSel != null) {
 						System.out.println("Acciones del partido:");
 						for (Accion a : pSel.getAcciones()) {
@@ -93,6 +93,33 @@ public class Principal {
 						System.out.println("Debes seleccionar partido");
 					}
 					break;
+				case 4:
+					acb.mostrarPartidos();
+					Partido p = new Partido();
+					System.out.println("Introduce código");
+					p.setCodigo(t.nextInt());t.nextLine();
+					p=acb.obtenerPartido(p);
+					if(p!=null) {
+						if(p.getAcciones().size()>0) {
+							System.out.println("Error, el partido tiene acciones");
+						}
+						else {
+							if(!acb.borrarPartido(p)) {
+								System.out.println("Error al borrar el partido4");
+							}
+						}
+						
+					}
+					else {
+						System.out.println("Error, el partido no existe");
+					}
+					break;
+				case 5:
+					if(pSel!=null) {
+						acb.mostrarEstadistica(pSel);
+					}
+					break;
+					
 				
 				}
 			} while (opcion != 0);
