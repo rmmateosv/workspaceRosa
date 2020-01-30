@@ -129,10 +129,13 @@ public class Modelo {
 				n.setAsig(new Asignatura(r.getString(2), null));
 				//Recuperamos el array de notas
 				Array notas = r.getArray(3);
-				String[][] tmp = (String[][]) notas.getArray();
-				//Rellenamos el arraylist de notas 
-				for(String[] no: tmp) {
-					n.getNotas().add(no);
+				//comprobamos si hay notas ya creadas
+				if(notas.getResultSet().next()) {
+					String[][] tmp = (String[][]) notas.getArray();
+					//Rellenamos el arraylist de notas 
+					for(String[] no: tmp) {
+						n.getNotas().add(no);
+					}
 				}
 				n.mostrar();
 			}
@@ -204,6 +207,54 @@ public class Modelo {
 			else {
 				e.printStackTrace();
 			}
+		}
+		return resultado;
+	}
+
+	public boolean existeMatricula(Alumno a, Asignatura as) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * "
+							+ "from nota "
+							+ "where alumno = ? and "
+							+ "asig = ?");
+			sentencia.setInt(1, a.getCodigo());
+			sentencia.setString(2, as.getNombreC());
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				resultado = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public boolean ponerNota(Nota n) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement consulta = 
+					conexion.prepareStatement("update nota "
+							+ "set notas = "
+							+ "array_cat(notas, array[?,?]::text[][]) "
+							+ "where alumno = ? and "
+							+ "asig = ?");
+			consulta.setString(1, n.getNotas().get(0)[0]);
+			consulta.setString(2, n.getNotas().get(0)[1]);
+			consulta.setInt(3, n.getAlumno().getCodigo());
+			consulta.setString(4, n.getAsig().getNombreC());
+			int ok = consulta.executeUpdate();
+			if(ok==1) {
+				resultado = true;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return resultado;
 	}
