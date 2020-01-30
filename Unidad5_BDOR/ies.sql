@@ -45,4 +45,19 @@ insert into asignatura values
     ('SI', 'Sistemas informáticos');
 
 
+create table nota(
+    alumno int not null,
+    asig varchar(10) not null,
+    notas text[][],
+    primary key (alumno,asig),
+    foreign key (alumno) references alumno(codigo),
+    foreign key (asig) references asignatura(nombreC)
+);
+
+insert into nota values 
+	(4,'LM',array[array['01/09/2019','7'],array['01/10/2019','8'],array['20/12/2019','10']]),
+    (5,'LM',array[array['20/12/2019','5']]),
+    (4,'BD',array[array['23/11/2019','8'],array['21/12/2019','9']]),
+    (6,'BD',array[array['23/11/2019','4'],array['21/12/2019','5']]);
+    
     
