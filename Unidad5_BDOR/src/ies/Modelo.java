@@ -141,5 +141,71 @@ public class Modelo {
 			e.printStackTrace();
 		}
 	}
+
+	public void mostrarAsig() {
+		// TODO Auto-generated method stub
+		try {
+			Statement consulta = conexion.createStatement();
+			ResultSet  r = 
+					consulta.executeQuery("select * "
+							+ "from asignatura "
+							+ "order by nombreC");
+			while(r.next()) {
+				Asignatura a = 
+						new Asignatura(r.getString(1), 
+								r.getString(2));
+				a.mostrar();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public boolean existeAsig(Asignatura as) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement sentencia = 
+					conexion.prepareStatement("select * "
+							+ "from asignatura "
+							+ "where nombreC = ?");
+			sentencia.setString(1, as.getNombreC());
+			ResultSet r = sentencia.executeQuery();
+			if(r.next()) {
+				resultado = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public boolean matricular(Alumno a, Asignatura as) {
+		// TODO Auto-generated method stub
+		boolean resultado = false;
+		try {
+			PreparedStatement consulta = 
+				conexion.prepareStatement("insert into "
+						+ "nota values (?,?, array[]::text[][])");
+			consulta.setInt(1,a.getCodigo());
+			consulta.setString(2,as.getNombreC());
+			
+			int ok = consulta.executeUpdate();
+			if(ok==1) {
+				resultado = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			if(e.getSQLState().equals("23505")) {
+				System.out.println("Error, ya existe la matrícula");
+			}
+			else {
+				e.printStackTrace();
+			}
+		}
+		return resultado;
+	}
 			
 }

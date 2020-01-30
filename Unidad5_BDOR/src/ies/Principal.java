@@ -17,11 +17,12 @@ public class Principal {
 				System.out.println("1-Mostrar Alumnos");
 				System.out.println("2-Modificar dirección");
 				System.out.println("3-Mostrar notas de un alumno");
-				System.out.println("4-Poner nota a alumno");
+				System.out.println("4-Matricular alumno");
 				
 				opcion = t.nextInt();t.nextLine();
 				
 				Alumno a;
+				Asignatura as;
 				switch(opcion) {
 				case 1:
 					ies.mostrarAlumnos();
@@ -62,6 +63,26 @@ public class Principal {
 					}
 					else {
 						System.out.println("No existe el alumno");
+					}
+					break;
+				case 4:
+					ies.mostrarAlumnos();
+					a=new Alumno();
+					System.out.println("Introduce código alumno");
+					a.setCodigo(t.nextInt());t.nextLine();
+					if(ies.existeAlumo(a)) {
+						ies.mostrarAsig();
+						as = new Asignatura();
+						System.out.println("Introduce nombre asignatura");
+						as.setNombreC(t.nextLine());
+						if(ies.existeAsig(as)) {
+							if(!ies.matricular(a,as)) {
+								System.out.println("Error al crear matrícula");
+							}
+						}
+					}
+					else {
+						System.out.println("El alumno no existe");
 					}
 					break;
 				
