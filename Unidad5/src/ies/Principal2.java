@@ -29,8 +29,10 @@ public class Principal2 {
 					ArrayList<Asignatura> asigs = iesOR.obtenerAsis();
 					if(!iesOO.crearAsig(asigs)) {
 						System.out.println("Error al importar asignaturas");
+					}
+					else {
 						ArrayList<Alumno> alum = iesOR.obtenerAlum();
-						if(!iesOO.importarAlumnos()) {
+						if(!iesOO.importarAlumnos(alum)) {
 							System.out.println("Error al importar alumos");
 						}
 					}

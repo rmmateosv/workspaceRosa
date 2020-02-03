@@ -72,7 +72,6 @@ INDEX VERSION 1.131+C:\Users\usuario\workspaceRosa\.metadata\.plugins\org.eclips
 1658538195.index
 1727476735.index
 749953205.index
-451489573.index
 357397737.index
 3521269531.index
 3091031171.index

@@ -281,5 +281,30 @@ public class ModeloOR {
 		
 		return resultado;
 	}
+
+	public ArrayList<Alumno> obtenerAlum() {
+		// TODO Auto-generated method stub
+		ArrayList<Alumno> resultado = new ArrayList<Alumno>();
+		try {
+			Statement consulta = conexion.createStatement();
+			ResultSet r = consulta.executeQuery("select codigo, nombre, "
+					+ "(dir).tipoV, (dir).nombreV, (dir).numero, "
+					+ "(dir).cp, fechaM "
+					+ "from alumno");
+			while(r.next()) {
+				Alumno a = new Alumno(r.getInt(1), 
+						r.getString(2), 
+						new Direccion(r.getString(3), 
+								r.getString(4), r.getInt(5), r.getInt(6)), 
+						new Date(r.getDate(7).getTime()));
+				resultado.add(a);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 			
 }
