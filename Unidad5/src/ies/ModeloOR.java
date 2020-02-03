@@ -7,14 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Modelo {
+public class ModeloOR {
 	Connection conexion = null;
 	private String url = "jdbc:postgresql://localhost:5432/IES";
 	private String usuario = "postgres", clave="root";
 
-	public Modelo() {
+	public ModeloOR() {
 		try {
 			Class.forName("org.postgresql.Driver");
 			
@@ -191,7 +192,7 @@ public class Modelo {
 		try {
 			PreparedStatement consulta = 
 				conexion.prepareStatement("insert into "
-						+ "nota values (?,?, array[]::text[][])");
+						+ "nota values (?,?, array[array[]]::text[][])");
 			consulta.setInt(1,a.getCodigo());
 			consulta.setString(2,as.getNombreC());
 			
@@ -240,7 +241,7 @@ public class Modelo {
 			PreparedStatement consulta = 
 					conexion.prepareStatement("update nota "
 							+ "set notas = "
-							+ "array_cat(notas, array[?,?]::text[][]) "
+							+ "array_cat(notas, array[array[?,?]]::text[][]) "
 							+ "where alumno = ? and "
 							+ "asig = ?");
 			consulta.setString(1, n.getNotas().get(0)[0]);
@@ -256,6 +257,28 @@ public class Modelo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return resultado;
+	}
+
+	public ArrayList<Asignatura> obtenerAsis() {
+		// TODO Auto-generated method stub
+		ArrayList<Asignatura> resultado = new ArrayList<Asignatura>();
+		try {
+			Statement consulta = conexion.createStatement();
+			ResultSet r = consulta.executeQuery("select * "
+					+ "from asignatura");
+			while(r.next()) {
+				Asignatura a = 
+						new Asignatura(r.getString(1), 
+								r.getString(2));
+				resultado.add(a);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return resultado;
 	}
 			

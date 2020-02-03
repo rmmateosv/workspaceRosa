@@ -10,7 +10,7 @@ public class Principal {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Modelo ies = new Modelo();
+		ModeloOR ies = new ModeloOR();
 		if(ies.getConexion()!=null) {
 			int opcion = 0;
 			do {
