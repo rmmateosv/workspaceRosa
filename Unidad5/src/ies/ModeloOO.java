@@ -58,5 +58,10 @@ public class ModeloOO {
 		
 		return resultado;
 	}
+
+	public boolean importarNotas(ArrayList<Nota> notas) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

@@ -35,6 +35,12 @@ public class Principal2 {
 						if(!iesOO.importarAlumnos(alum)) {
 							System.out.println("Error al importar alumos");
 						}
+						else {
+							ArrayList<Nota> notas = iesOR.obtenerNotas();
+							if(!iesOO.importarNotas(notas)) {
+								System.out.println("Error al importar notas");
+							}
+						}
 					}
 					break;
 				

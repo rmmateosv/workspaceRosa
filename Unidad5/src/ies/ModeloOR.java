@@ -306,5 +306,24 @@ public class ModeloOR {
 		}
 		return resultado;
 	}
+
+	public ArrayList<Nota> obtenerNotas() {
+		// TODO Auto-generated method stub
+		ArrayList<Nota> resultado = new ArrayList<Nota>();
+		try {
+			Statement consulta = conexion.createStatement();
+			ResultSet r = 
+					consulta.executeQuery("select * from nota");
+			while(r.next()) {
+				Nota n = ;
+				resultado.add(n);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultado;
+	}
 			
 }
