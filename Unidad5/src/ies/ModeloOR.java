@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -315,11 +317,31 @@ public class ModeloOR {
 			ResultSet r = 
 					consulta.executeQuery("select * from nota");
 			while(r.next()) {
-				Nota n = ;
+				Nota n = new Nota();
+				
+				n.setAlumno(
+						new Alumno(r.getInt(1), null, null, null));
+				
+				n.setAsig(new Asignatura(r.getString(2), null));
+				
+				Array notas = r.getArray(3);
+				String[][] aux = (String[][]) notas.getArray();
+				
+				SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				for(String[] s: aux) {
+					Date f = df.parse(s[0]);
+					int nota = Integer.parseInt(s[1]);
+					n.getNotas2().add(new NotaExamen(f, nota));
+				}
+				
+				
 				resultado.add(n);
 				
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
