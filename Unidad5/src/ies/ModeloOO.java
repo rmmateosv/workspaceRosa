@@ -6,6 +6,7 @@ import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.config.EmbeddedConfiguration;
+import com.db4o.query.Predicate;
 
 public class ModeloOO {
 	private ObjectContainer conexion= null;
@@ -15,7 +16,9 @@ public class ModeloOO {
 		EmbeddedConfiguration config = 
 				Db4oEmbedded.newConfiguration();
 		config.common().objectClass(Alumno.class).cascadeOnDelete(true);
-		conexion = Db4oEmbedded.openFile("ies.db4o");
+		config.common().objectClass(Alumno.class).cascadeOnUpdate(true);
+		config.common().objectClass(Nota.class).cascadeOnUpdate(true);
+		conexion = Db4oEmbedded.openFile(config,"ies.db4o");
 	}
 
 	public ObjectContainer getConexion() {
@@ -128,7 +131,7 @@ public class ModeloOO {
 		// TODO Auto-generated method stub
 		boolean resultado=false;
 		try {
-			conexion.store(a.getDireccion());
+			conexion.store(a);
 			resultado = true;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -240,7 +243,7 @@ public class ModeloOO {
 		// TODO Auto-generated method stub
 		boolean resultado = false;
 		try {
-			conexion.store(n.getNotas2());
+			conexion.store(n);
 			resultado = true;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -253,6 +256,23 @@ public class ModeloOO {
 		// TODO Auto-generated method stub
 		boolean resultado = false;
 		try {
+			Nota n = new Nota();
+			n.setAlumno(a);
+			ObjectSet<Nota> r = 
+					conexion.queryByExample(n);
+			while(r.hasNext()) {
+				Nota nota = r.next();
+				//Borramos todas las NotaExamen
+				for(NotaExamen ne:nota.getNotas2()) {
+					conexion.delete(ne);
+				}
+				//borramos los ArrayList
+				conexion.delete(nota.getNotas2());
+				conexion.delete(nota.getNotas());
+				//Borramos la nota
+				conexion.delete(nota);
+			}
+			//borramos alumno
 			conexion.delete(a);
 			resultado = true;
 		} catch (Exception e) {
@@ -260,6 +280,59 @@ public class ModeloOO {
 			e.printStackTrace();
 		}
 		return resultado;
+	}
+
+	public void borrarBD() {
+		try {
+			// TODO Auto-generated method stub
+			ObjectSet<Object> r = conexion.queryByExample(new Object());
+			while(r.hasNext()) {
+				conexion.delete(r.next());
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+	public void mostrarAprobados(Asignatura as) {
+		// TODO Auto-generated method stub
+		try {
+			ObjectSet<Nota> r = conexion.query(new Predicate<Nota>() {
+
+				@Override
+				public boolean match(Nota arg0) {
+					// TODO Auto-generated method stub
+					boolean resultado = false;
+					//Chequeamos asignatura
+					if(arg0.getAsig()==as) {
+						//Calculamos la media
+						float media = 0;
+						for(NotaExamen ne:arg0.getNotas2()) {
+							media += ne.getNota();
+							
+						}
+						if((media/arg0.getNotas2().size())>=5) {
+							resultado =true;
+						}
+					}
+					
+					return resultado;
+				}
+
+				
+			});
+			while(r.hasNext()) {
+				r.next().mostrar(true);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -24,6 +24,7 @@ public class Principal2 {
 				System.out.println("5-Matricular alumno");
 				System.out.println("6-Poner nota");
 				System.out.println("7-Borrar alumnos y sus notas si tiene");
+				System.out.println("8-Mostrar alumnos aprobados (media>=5) de una asignatura");
 				
 				
 				opcion = t.nextInt();t.nextLine();
@@ -32,6 +33,7 @@ public class Principal2 {
 				Asignatura as;
 				switch(opcion) {
 				case 1:
+					iesOO.borrarBD();
 					//Importamos asignaturas
 					ArrayList<Asignatura> asigs = iesOR.obtenerAsis();
 					if(!iesOO.crearAsig(asigs)) {
@@ -164,6 +166,19 @@ public class Principal2 {
 					}
 					else {
 						System.out.println("Error, el alumno no existe");
+					}
+					break;
+				case 8:
+					iesOO.mostrarAsignaturas();
+					System.out.println("Introduce asignatura");
+					as = new Asignatura();
+					as.setNombreC(t.nextLine());
+					as = iesOO.obtenerAsignatura(as);
+					if(as!=null){
+						iesOO.mostrarAprobados(as);
+					}
+					else {
+						System.out.println("Error, la asignatura no existe");
 					}
 					break;
 				
