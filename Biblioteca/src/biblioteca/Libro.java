@@ -81,4 +81,10 @@ public class Libro  implements Serializable{
 		}
 		
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return isbn + "-" + titulo;
+	}
+	
 }

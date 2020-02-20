@@ -92,4 +92,9 @@ public class Socio  implements Serializable{
 	public void setFechaSancion(Date fechaSancion) {
 		this.fechaSancion = fechaSancion;
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return nif + "-" + nombre;
+	}
 }	
