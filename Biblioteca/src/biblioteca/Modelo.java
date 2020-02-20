@@ -140,7 +140,9 @@ public class Modelo {
 			t.begin();
 			//em.merge(l);
 			t.commit();
+			em.clear();
 			resultado=true;
+			
 					
 		} catch (Exception e) {
 			// TODO: handle exception
